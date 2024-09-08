@@ -120,5 +120,98 @@
             hScObject As IntPtr
         ) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
+
+        ''' <summary>
+        ''' Creates a service object and adds it to the specified service control manager database.
+        ''' </summary>
+        ''' <param name="hScManager">
+        ''' A handle to the service control manager database. This handle is returned by the <c>OpenSCManager</c> function and must have the 
+        ''' <see cref="ServiceManagerAccessFlags.CreateService"/> access right.
+        ''' </param>
+        ''' <param name="lpServiceName">
+        ''' The name of the service to install. The maximum string length is 256 characters. The service control manager database preserves 
+        ''' the case of the characters, but service name comparisons are always case-insensitive. Forward-slash (/) and backslash (\) are 
+        ''' not valid service name characters.
+        ''' </param>
+        ''' <param name="lpDisplayName">
+        ''' The display name to be used by user interface programs to identify the service. This string has a maximum length of 256 characters. 
+        ''' The name is case-preserved in the service control manager. Display name comparisons are always case-insensitive.
+        ''' </param>
+        ''' <param name="dwDesiredAccess">
+        ''' The access to the service. Before granting the requested access, the system checks the access token of the calling process. For a list 
+        ''' of values, see <see cref="ServiceAccessFlags"/> for Service Security and Access Rights.
+        ''' </param>
+        ''' <param name="dwServiceType">
+        ''' The service type. This parameter can be one of the values defined in <see cref="ServiceType"/>. 
+        ''' </param>
+        ''' <param name="dwStartType">
+        ''' The service start options. This parameter can be one of the values defined in <see cref="ServiceStartType"/>.
+        ''' </param>
+        ''' <param name="dwErrorControl">
+        ''' The severity of the error, and action taken, if this service fails to start. This parameter can be one of the values defined in <see cref="ErrorControlLevel"/>.
+        ''' </param>
+        ''' <param name="lpBinaryPathName">
+        ''' The fully qualified path to the service binary file. If the path contains a space, it must be quoted so that it is correctly interpreted.
+        ''' </param>
+        ''' <param name="lpLoadOrderGroup">
+        ''' The names of the load ordering group of which this service is a member. Specify <c>Nothing</c> or an empty string if the service does not belong to a group.
+        ''' </param>
+        ''' <param name="lpdwTagId">
+        ''' A pointer to a variable that receives a tag value that is unique in the group specified in the <c>lpLoadOrderGroup</c> parameter. 
+        ''' Specify <c>Nothing</c> if you are not changing the existing tag.
+        ''' </param>
+        ''' <param name="lpDependencies">
+        ''' A pointer to a double null-terminated array of null-separated names of services or load ordering groups that the system must start before 
+        ''' this service. Specify <c>Nothing</c> or an empty string if the service has no dependencies.
+        ''' </param>
+        ''' <param name="lpServiceStartName">
+        ''' The name of the account under which the service should run. If the service type is <see cref="ServiceType.SERVICE_WIN32_OWN_PROCESS"/>, use an account name in the 
+        ''' form <c>DomainName\UserName</c>.
+        ''' </param>
+        ''' <param name="lpPassword">
+        ''' The password to the account name specified by the <c>lpServiceStartName</c> parameter.
+        ''' </param>
+        ''' <returns>
+        ''' If the function succeeds, the return value is a handle to the service.
+        ''' </returns>
+        ''' <remarks>
+        ''' For more details, see <see href="https://docs.microsoft.com/en-us/windows/desktop/api/winsvc/nf-winsvc-createservicea">CreateServiceA</see>.
+        ''' 
+        ''' The C++ function signature is as follows:
+        ''' <code>
+        ''' SC_HANDLE CreateServiceA(
+        '''   [in]            SC_HANDLE hSCManager,
+        '''   [in]            LPCSTR    lpServiceName,
+        '''   [in, optional]  LPCSTR    lpDisplayName,
+        '''   [in]            DWORD     dwDesiredAccess,
+        '''   [in]            DWORD     dwServiceType,
+        '''   [in]            DWORD     dwStartType,
+        '''   [in]            DWORD     dwErrorControl,
+        '''   [in, optional]  LPCSTR    lpBinaryPathName,
+        '''   [in, optional]  LPCSTR    lpLoadOrderGroup,
+        '''   [out, optional] LPDWORD   lpdwTagId,
+        '''   [in, optional]  LPCSTR    lpDependencies,
+        '''   [in, optional]  LPCSTR    lpServiceStartName,
+        '''   [in, optional]  LPCSTR    lpPassword
+        ''' );
+        ''' </code>
+        ''' </remarks>
+        <DllImport(ExternDll.Advapi32, SetLastError:=True, CharSet:=CharSet.Unicode)>
+        Friend Shared Function CreateService(
+            <[In]> hScManager As IntPtr,
+            <[In]> lpServiceName As String,
+            <[In], [Optional]> lpDisplayName As String,
+            <[In]> dwDesiredAccess As DesiredAccess,
+            <[In]> dwServiceType As ServiceType,
+            <[In]> dwStartType As StartType,
+            <[In]> dwErrorControl As ServiceErrorControlFlags,
+            <[In], [Optional]> lpBinaryPathName As String,
+            <[In], [Optional]> lpLoadOrderGroup As String,
+            <[Out], [Optional]> lpdwTagId As UInteger,
+            <[In], [Optional]> lpDependencies As String,
+            <[In], [Optional]> lpServiceStartName As String,
+            <[In], [Optional]> lpPassword As String
+        ) As IntPtr
+        End Function
     End Class
 End Namespace

@@ -37,12 +37,18 @@
         ''' for the user to press Enter before terminating.
         ''' </remarks>
         Friend Sub Run()
-            Dim userAccountService = _serviceProvider.GetService(Of IUserInputChecker)()
-            Dim shouldProceed = userAccountService.ShouldProceed()
-            Console.WriteLine($"Should continue: {shouldProceed}")
-
-
-
+            Dim userInputChecker = _serviceProvider.GetService(Of IUserInputChecker)()
+            Dim serviceInstaller = _serviceProvider.GetService(Of IServiceInstaller)()
+            Dim shouldProceed = userInputChecker.ShouldProceed()
+            If shouldProceed Then
+                Dim installationSuccess = serviceInstaller.InstallService()
+                If Not installationSuccess Then
+                    Dim win32ErrorHelper = _serviceProvider.GetService(Of IWin32ErrorHelper)()
+                    Console.WriteLine($"Service installation failed. Error code: {win32ErrorHelper.GetLastWin32Error()}")
+                Else
+                    Console.WriteLine($"Service installation success: {installationSuccess}")
+                End If
+            End If
             Console.ReadLine()
         End Sub
     End Class

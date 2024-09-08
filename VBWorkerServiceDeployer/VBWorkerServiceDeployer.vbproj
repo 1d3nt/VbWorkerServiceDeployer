@@ -4,8 +4,9 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>VBWorkerServiceDeployer</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
-    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,System.Diagnostics.CodeAnalysis=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VBWorkerServiceDeployer.Application=False,VBWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods=False,VBWorkerServiceDeployer.Utilities=False,VBWorkerServiceDeployer.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VBWorkerServiceDeployer=True</ImportedNamespaces>
+    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,System.Diagnostics.CodeAnalysis=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VBWorkerServiceDeployer.Application=False,VBWorkerServiceDeployer.CoreServices.ServiceManagement=False,VBWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods=False,VBWorkerServiceDeployer.Utilities=False,VBWorkerServiceDeployer.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VBWorkerServiceDeployer=True</ImportedNamespaces>
     <OptionStrict>On</OptionStrict>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
     <Import Include="System.Runtime.InteropServices" />
     <Import Include="System.Runtime.Versioning" />
     <Import Include="VBWorkerServiceDeployer.Application" />
+    <Import Include="VBWorkerServiceDeployer.CoreServices.ServiceManagement" />
     <Import Include="VBWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces" />
     <Import Include="VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums" />
     <Import Include="VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods" />

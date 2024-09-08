@@ -1,6 +1,4 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
-
-Namespace Application
+﻿Namespace Application
 
     ''' <summary>
     ''' Configures the services for dependency injection.
@@ -48,7 +46,10 @@ Namespace Application
         ''' </remarks>
         Friend Shared Function ConfigureServices() As IServiceProvider
             Dim services As New ServiceCollection()
-            services.AddTransient(Of IUserInputChecker, UserInputChecker )()
+            services.AddTransient(Of IUserInputChecker, UserInputChecker)()
+            services.AddTransient(Of IServiceInstaller, ServiceInstaller)()
+            services.AddTransient(Of IServicePathProvider, ServicePathProvider)()
+            services.AddTransient(Of IWin32ErrorHelper, Win32ErrorHelper)
             Return services.BuildServiceProvider()
         End Function
     End Class
