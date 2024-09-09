@@ -22,10 +22,12 @@
         ''' <summary>
         ''' Gets the name of the service.
         ''' </summary>
-        ''' <returns>The name of the service.</returns>
+        ''' <returns>
+        ''' A <see cref="String"/> representing the name of the service.
+        ''' </returns>
         Public Function GetServiceName() As String Implements IServicePathProvider.GetServiceName
-            ' Logic to obtain the service name
-            Return "VBW"
+            Dim assemblyName As String = Reflection.Assembly.GetExecutingAssembly().GetName().Name
+            Return assemblyName
         End Function
     End Class
 End Namespace

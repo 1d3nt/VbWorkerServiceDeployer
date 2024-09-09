@@ -41,15 +41,16 @@
             Dim serviceInstaller = _serviceProvider.GetService(Of IServiceInstaller)()
             Dim shouldProceed = userInputChecker.ShouldProceed()
             If shouldProceed Then
-                Dim installationSuccess = serviceInstaller.InstallService()
-                If Not installationSuccess Then
-                    Dim win32ErrorHelper = _serviceProvider.GetService(Of IWin32ErrorHelper)()
-                    Console.WriteLine($"Service installation failed. Error code: {win32ErrorHelper.GetLastWin32Error()}")
-                Else
+                Try
+                    Dim installationSuccess = serviceInstaller.InstallService()
                     Console.WriteLine($"Service installation success: {installationSuccess}")
-                End If
+                Catch ex As Exception
+                    Console.WriteLine($"Service installation failed: {ex.Message}")
+                End Try
             End If
             Console.ReadLine()
         End Sub
     End Class
 End Namespace
+
+

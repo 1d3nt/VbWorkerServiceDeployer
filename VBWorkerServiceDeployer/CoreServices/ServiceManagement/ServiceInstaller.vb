@@ -5,109 +5,66 @@
     ''' </summary>
     ''' <remarks>
     ''' The <see cref="ServiceInstaller"/> class provides methods to install services using P/Invoke and other necessary operations.
+    ''' It utilizes the <see cref="IServiceControlManager"/> to manage the Service Control Manager and the <see cref="IServiceCreator"/>
+    ''' to create the service.
     ''' </remarks>
     Public Class ServiceInstaller
         Implements IServiceInstaller
 
         ''' <summary>
-        ''' Represents the local machine name used in P/Invoke calls to specify the local system.
+        ''' An instance of <see cref="IServiceControlManager"/> used to manage the Service Control Manager.
         ''' </summary>
         ''' <remarks>
-        ''' This constant is used in P/Invoke calls such as <see cref="NativeMethods.OpenSCManager"/> where 
-        ''' the first argument specifies the target machine. A value of "." refers to the local machine.
+        ''' This field is used to open and close the Service Control Manager.
         ''' </remarks>
-        Private Const LocalMachineName As String = "."
+        Private ReadOnly _serviceControlManager As IServiceControlManager
 
         ''' <summary>
-        ''' Represents the default service control manager database.
+        ''' An instance of <see cref="IServiceCreator"/> used to create the service.
         ''' </summary>
         ''' <remarks>
-        ''' This constant is used in P/Invoke calls where the service control manager database 
-        ''' is not specified, allowing the system to use the default database.
+        ''' This field is used to create the service using the provided service control manager handle.
         ''' </remarks>
-        Private Const DefaultScmDatabase As String = Nothing
-
-        ''' <summary>
-        ''' The service path provider used for retrieving service paths and names.
-        ''' </summary>
-        Private ReadOnly _servicePathProvider As IServicePathProvider
-
-        ''' <summary>
-        ''' Provides utility methods for handling Win32 errors.
-        ''' </summary>
-        Private ReadOnly _win32ErrorHelper As IWin32ErrorHelper
+        Private ReadOnly _serviceCreator As IServiceCreator
 
         ''' <summary>
         ''' Initializes a new instance of the <see cref="ServiceInstaller"/> class.
         ''' </summary>
-        ''' <param name="servicePathProvider">
-        ''' An instance of <see cref="IServicePathProvider"/> used to obtain service paths and names.
-        ''' </param>
-        ''' <param name="win32ErrorHelper">
-        ''' An instance of <see cref="IWin32ErrorHelper"/> used to retrieve Win32 error codes.
-        ''' </param>
+        ''' <param name="serviceControlManager">An instance of <see cref="IServiceControlManager"/> used to manage the Service Control Manager.</param>
+        ''' <param name="serviceCreator">An instance of <see cref="IServiceCreator"/> used to create the service.</param>
         ''' <remarks>
-        ''' The constructor takes instances of <see cref="IServicePathProvider"/> and <see cref="IWin32ErrorHelper"/> 
-        ''' as parameters and assigns them to the corresponding fields. The <see cref="_servicePathProvider"/> field 
-        ''' is used to obtain service paths and names, while the <see cref="_win32ErrorHelper"/> field is used for handling 
-        ''' Win32 error codes.
+        ''' This constructor initializes the <see cref="ServiceInstaller"/> with the provided instances of 
+        ''' <see cref="IServiceControlManager"/> and <see cref="IServiceCreator"/>. The <see cref="_serviceControlManager"/> 
+        ''' field is used to manage the Service Control Manager, and the <see cref="_serviceCreator"/> field is used to create the service.
         ''' </remarks>
-        Public Sub New(servicePathProvider As IServicePathProvider, win32ErrorHelper As IWin32ErrorHelper)
-            _servicePathProvider = servicePathProvider
-            _win32ErrorHelper = win32ErrorHelper
+        Public Sub New(serviceControlManager As IServiceControlManager, serviceCreator As IServiceCreator)
+            _serviceControlManager = serviceControlManager
+            _serviceCreator = serviceCreator
         End Sub
 
         ''' <summary>
         ''' Installs the service.
         ''' </summary>
-        ''' <returns>
-        ''' <c>True</c> if the service was installed successfully; otherwise, <c>False</c>.
-        ''' </returns>
+        ''' <returns><c>True</c> if the service was installed successfully; otherwise, <c>False</c>.</returns>
         ''' <remarks>
-        ''' The <see cref="IServiceInstaller.InstallService"/> method should implement the logic required 
-        ''' to install a service, including any necessary configuration and setup steps. The method is 
-        ''' expected to return <c>True</c> upon successful installation of the service, indicating that 
-        ''' the service has been correctly set up and registered. If the installation fails or encounters 
-        ''' issues, the method should return <c>False</c> to signal that the process was not completed 
-        ''' successfully. This allows the caller to handle any errors or take appropriate actions based 
-        ''' on the success or failure of the service installation.
+        ''' The <see cref="InstallService"/> method implements the logic required to install a service, 
+        ''' including necessary configuration and setup steps. It returns <c>True</c> upon successful 
+        ''' installation of the service, indicating that the service has been correctly set up and registered. 
+        ''' If the installation fails or encounters issues, it returns <c>False</c> to signal that the process 
+        ''' was not completed successfully, allowing the caller to handle any errors or take appropriate 
+        ''' actions based on the success or failure of the service installation.
         ''' </remarks>
         Public Function InstallService() As Boolean Implements IServiceInstaller.InstallService
             Dim serviceControlManager As IntPtr = NativeMethods.NullHandleValue
             Try
-                serviceControlManager = NativeMethods.OpenSCManager(LocalMachineName, DefaultScmDatabase, ServiceManagerAccessFlags.CreateService)
-                If Equals(serviceControlManager, NativeMethods.NullHandleValue) Then
-                    Throw New InvalidOperationException($"Failed to open Service Control Manager. Error code: {_win32ErrorHelper.GetLastWin32Error()}")
-                End If
-                Dim service = TryCreateService(_servicePathProvider.GetServicePath(), _servicePathProvider.GetServiceName(), serviceControlManager)
-                If Equals(service, NativeMethods.NullHandleValue) Then
-                    Throw New InvalidOperationException($"Failed to create service. Error code: {_win32ErrorHelper.GetLastWin32Error()}")
-                End If
+                serviceControlManager = _serviceControlManager.Open()
+                _serviceCreator.Create(serviceControlManager)
                 Return True
-            Catch ex As Exception
-                Console.WriteLine($"Error installing service: {ex.Message}")
-                Return False
+            Catch
+                Throw
             Finally
-                HandleManager.CloseServiceHandleIfNotNull(serviceControlManager)
+                _serviceControlManager.Close(serviceControlManager)
             End Try
-        End Function
-
-
-        ''' <summary>
-        ''' Creates a service object and installs it in the service control manager database 
-        ''' by creating a key with the service name under the following registry key: 
-        ''' HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services.
-        ''' </summary>
-        ''' <param name="servicePath">Specifies the full path to the service executable.</param>
-        ''' <param name="serviceName">Specifies the name to be used for the Service key in the registry.</param>
-        ''' <param name="serviceControlManager">Handle to the service control manager database returned by <see cref="NativeMethods.OpenSCManager" />.</param>
-        ''' <returns>
-        ''' Returns a handle to the newly created service if successful. If it fails, returns IntPtr.Zero.
-        ''' Call GetLastError for extended error information.
-        ''' </returns>
-        Private Shared Function TryCreateService(servicePath As String, serviceName As String, serviceControlManager As IntPtr) As IntPtr
-            Return NativeMethods.CreateService(serviceControlManager, serviceName, serviceName, DesiredAccess.All, ServiceType.Win32OwnProcess, StartType.Automatic, ServiceErrorControlFlags.ServiceErrorNormal,
-                                               servicePath, lpLoadOrderGroup:=Nothing, lpdwTagId:=0, lpDependencies:=Nothing, lpServiceStartName:=Nothing, lpPassword:=Nothing)
         End Function
     End Class
 End Namespace
