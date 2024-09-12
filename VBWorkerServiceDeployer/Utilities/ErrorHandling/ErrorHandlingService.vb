@@ -1,4 +1,4 @@
-﻿Namespace Utilities
+﻿Namespace Utilities.ErrorHandling
 
     ''' <summary>
     ''' Provides methods for handling Win32 errors, including retrieving and interpreting error descriptions.

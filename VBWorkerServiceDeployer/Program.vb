@@ -30,14 +30,17 @@ Module Program
     ''' The <paramref name="args"/> parameter is included to adhere to the standard signature for a console application's
     ''' <see cref="Main"/> method. While this parameter is not utilized in the current implementation, including it
     ''' follows best practices and ensures consistency with the conventional entry point signature. 
-    ''' The <see cref="SuppressMessageAttribute"/> is applied to prevent style warnings that suggest removing the unused
-    ''' parameter, as its presence aligns with standard application design and provides future-proofing in case command-line
-    ''' arguments are needed in the future.
+    ''' 
+    ''' The method calls <see cref="AppRunner.RunAsync"/> and waits for its completion using 
+    ''' <see cref="M:System.Threading.Tasks.Task.GetAwaiter().GetResult"/>. This approach ensures that the asynchronous operations in 
+    ''' <see cref="AppRunner.RunAsync"/> complete before the application exits. It avoids potential deadlock issues 
+    ''' that can arise with the use of <see cref="M:System.Threading.Tasks.Task.Wait()"/> and is appropriate for the console application's 
+    ''' synchronous entry point.
     ''' </remarks>
     <SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification:="Standard Main method parameter signature.")>
     Sub Main(args As String())
         Dim serviceProvider As IServiceProvider = ServiceConfigurator.ConfigureServices()
         Dim appRunner As New AppRunner(serviceProvider)
-        appRunner.Run()
+        appRunner.RunAsync().GetAwaiter().GetResult()
     End Sub
 End Module

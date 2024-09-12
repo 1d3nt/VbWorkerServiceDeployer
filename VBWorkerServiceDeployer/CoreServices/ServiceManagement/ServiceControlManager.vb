@@ -40,13 +40,27 @@
         End Sub
 
         ''' <summary>
-        ''' Opens the Service Control Manager.
+        ''' Opens the Service Control Manager with the specified access rights.
         ''' </summary>
+        ''' <param name="desiredAccess">The desired access level for the Service Control Manager.</param>
         ''' <returns>An IntPtr representing the handle to the Service Control Manager.</returns>
-        Public Function Open() As IntPtr Implements IServiceControlManager.Open
-            Dim serviceControlManager = NativeMethods.OpenSCManager(LocalMachineName, DefaultScmDatabase, ServiceManagerAccessFlags.CreateService)
+        Public Function Open(desiredAccess As ServiceManagerAccessFlags) As IntPtr Implements IServiceControlManager.Open
+            Dim serviceControlManager = NativeMethods.OpenSCManager(LocalMachineName, DefaultScmDatabase, desiredAccess)
             _errorHandlingService.HandleWin32Error(serviceControlManager)
             Return serviceControlManager
+        End Function
+
+        ''' <summary>
+        ''' Opens a handle to the specified service.
+        ''' </summary>
+        ''' <param name="scmHandle">The handle to the Service Control Manager.</param>
+        ''' <param name="serviceName">The name of the service to open.</param>
+        ''' <param name="desiredAccess">The desired access level for the service.</param>
+        ''' <returns>An IntPtr representing the handle to the service.</returns>
+        Public Function OpenService(scmHandle As IntPtr, serviceName As String, desiredAccess As DesiredAccess) As IntPtr Implements IServiceControlManager.OpenService
+            Dim serviceHandle = NativeMethods.OpenService(scmHandle, serviceName, desiredAccess)
+            _errorHandlingService.HandleWin32Error(serviceHandle)
+            Return serviceHandle
         End Function
 
         ''' <summary>

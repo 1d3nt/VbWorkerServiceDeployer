@@ -139,16 +139,16 @@
         ''' </param>
         ''' <param name="dwDesiredAccess">
         ''' The access to the service. Before granting the requested access, the system checks the access token of the calling process. For a list 
-        ''' of values, see <see cref="ServiceAccessFlags"/> for Service Security and Access Rights.
+        ''' of values, see <see cref="DesiredAccess"/> for Service Security and Access Rights.
         ''' </param>
         ''' <param name="dwServiceType">
         ''' The service type. This parameter can be one of the values defined in <see cref="ServiceType"/>. 
         ''' </param>
         ''' <param name="dwStartType">
-        ''' The service start options. This parameter can be one of the values defined in <see cref="ServiceStartType"/>.
+        ''' The service start options. This parameter can be one of the values defined in <see cref="StartType"/>.
         ''' </param>
         ''' <param name="dwErrorControl">
-        ''' The severity of the error, and action taken, if this service fails to start. This parameter can be one of the values defined in <see cref="ErrorControlLevel"/>.
+        ''' The severity of the error, and action taken, if this service fails to start. This parameter can be one of the values defined in <see cref="ServiceErrorControlFlags"/>.
         ''' </param>
         ''' <param name="lpBinaryPathName">
         ''' The fully qualified path to the service binary file. If the path contains a space, it must be quoted so that it is correctly interpreted.
@@ -165,7 +165,7 @@
         ''' this service. Specify <c>Nothing</c> or an empty string if the service has no dependencies.
         ''' </param>
         ''' <param name="lpServiceStartName">
-        ''' The name of the account under which the service should run. If the service type is <see cref="ServiceType.SERVICE_WIN32_OWN_PROCESS"/>, use an account name in the 
+        ''' The name of the account under which the service should run. If the service type is <see cref="ServiceType.Win32OwnProcess"/>, use an account name in the 
         ''' form <c>DomainName\UserName</c>.
         ''' </param>
         ''' <param name="lpPassword">
@@ -212,6 +212,129 @@
             <[In], [Optional]> lpServiceStartName As String,
             <[In], [Optional]> lpPassword As String
         ) As IntPtr
+        End Function
+
+        ''' <summary>
+        ''' Opens an existing service in the specified service control manager database.
+        ''' </summary>
+        ''' <param name="hScManager">
+        ''' A handle to the service control manager database. The <see cref="OpenSCManager"/> function returns this handle.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' </param>
+        ''' <param name="lpServiceName">
+        ''' The name of the service to be opened. This is the name specified by the <paramref name="lpServiceName"/> parameter of 
+        ''' the <see cref="CreateService"/> function when the service object was created, not the service display name.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' </param>
+        ''' <param name="dwDesiredAccess">
+        ''' The access to the service. This parameter specifies the desired access rights, which can be a combination of values 
+        ''' from the <see cref="DesiredAccess"/> enumeration.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' </param>
+        ''' <returns>
+        ''' If the function succeeds, the return value is a handle to the specified service. If the function fails, the return value is <c>IntPtr.Zero</c>. 
+        ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
+        ''' </returns>
+        ''' <remarks>
+        ''' For additional information, refer to the <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openservicea">OpenServiceA</see> documentation.
+        ''' 
+        ''' The function signature in C++ is:
+        ''' <code>
+        ''' SC_HANDLE OpenServiceA(
+        '''   [in] SC_HANDLE hSCManager,
+        '''   [in] LPCSTR    lpServiceName,
+        '''   [in] DWORD     dwDesiredAccess
+        ''' );
+        ''' </code>
+        ''' </remarks>
+        <DllImport(ExternDll.Advapi32, SetLastError:=True)>
+        Friend Shared Function OpenService(
+            <[In]> hScManager As IntPtr,
+            <[In], MarshalAs(UnmanagedType.LPWStr)> lpServiceName As String,
+            <[In]> dwDesiredAccess As DesiredAccess
+        ) As IntPtr
+        End Function
+
+        ''' <summary>
+        ''' Sends a control code to a service, which can be used to change the state of the service.
+        ''' </summary>
+        ''' <param name="hService">
+        ''' A handle to the service. This handle is returned by the <see cref="OpenService"/> or <see cref="CreateService"/> function.
+        ''' The access rights required for this handle depend on the <paramref name="dwControl"/> code requested.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' </param>
+        ''' <param name="dwControl">
+        ''' A control code that specifies the requested control action. This parameter can be one of the values from the <see cref="ServiceControlCodes"/> enumeration.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' </param>
+        ''' <param name="lpServiceStatus">
+        ''' A reference to a <see cref="ServiceStatus"/> structure that receives the latest service status information.
+        ''' The information returned reflects the most recent status that the service reported to the service control manager.
+        ''' This parameter is passed with the <c>[Out]</c> attribute.
+        ''' </param>
+        ''' <returns>
+        ''' If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. 
+        ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
+        ''' </returns>
+        ''' <remarks>
+        ''' For additional information, refer to the <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-controlservice">ControlService</see> documentation.
+        ''' 
+        ''' The function signature in C++ is:
+        ''' <code>
+        ''' BOOL ControlService(
+        '''   [in]  SC_HANDLE        hService,
+        '''   [in]  DWORD            dwControl,
+        '''   [out] LPSERVICE_STATUS lpServiceStatus
+        ''' );
+        ''' </code>
+        ''' </remarks>
+        <DllImport(ExternDll.Advapi32, SetLastError:=True)>
+        Friend Shared Function ControlService(
+            <[In]> hService As IntPtr,
+            <[In]> dwControl As ServiceControlCodes,
+            <[Out]> ByRef lpServiceStatus As ServiceStatus
+        ) As Boolean
+        End Function
+
+        ''' <summary>
+        ''' Starts a service that has been previously opened using the <see cref="OpenService"/> or <see cref="CreateService"/> functions.
+        ''' </summary>
+        ''' <param name="hService">
+        ''' A handle to the service. This handle is returned by the <see cref="OpenService"/> or <see cref="CreateService"/> function,
+        ''' and it must have the <c>SERVICE_START</c> access right. For more information, see Service Security and Access Rights.
+        ''' </param>
+        ''' <param name="dwNumServiceArgs">
+        ''' The number of arguments passed to the service. This corresponds to the number of strings in the <paramref name="lpServiceArgVectors"/> array.
+        ''' If <paramref name="lpServiceArgVectors"/> is <c>Nothing</c>, this parameter must be zero.
+        ''' </param>
+        ''' <param name="lpServiceArgVectors">
+        ''' An array of null-terminated strings to be passed to the service as arguments. If there are no arguments, 
+        ''' this parameter can be <c>Nothing</c>. If provided, the first argument (lpServiceArgVectors[0]) is typically the name of the service, 
+        ''' followed by any additional arguments (lpServiceArgVectors[1] through lpServiceArgVectors[dwNumServiceArgs-1]).
+        ''' </param>
+        ''' <returns>
+        ''' <c>True</c> if the function succeeds; otherwise, <c>False</c>. Call <see cref="Marshal.GetLastWin32Error"/> to get extended error information.
+        ''' </returns>
+        ''' <remarks>
+        ''' The <c>StartService</c> function sends a start control request to a service. The service must be in the <c>SERVICE_STOPPED</c> state. 
+        ''' After the service starts, its <c>ServiceMain</c> function is called with the arguments provided in the <paramref name="lpServiceArgVectors"/> array.
+        ''' 
+        ''' In C++:
+        ''' <code>
+        ''' BOOL StartServiceA(
+        '''   [in]           SC_HANDLE hService,
+        '''   [in]           DWORD     dwNumServiceArgs,
+        '''   [in, optional] LPCSTR    *lpServiceArgVectors
+        ''' );
+        ''' </code>
+        ''' See <a href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicea">StartServiceA documentation</a> for more details.
+        ''' </remarks>
+        <DllImport(ExternDll.Advapi32, SetLastError:=True)>
+        Friend Shared Function StartService(
+            <[in]> hService As IntPtr,
+            <[In]> dwNumServiceArgs As Integer,
+            <[In], [Optional]> lpServiceArgVectors() As String
+        ) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
     End Class
 End Namespace

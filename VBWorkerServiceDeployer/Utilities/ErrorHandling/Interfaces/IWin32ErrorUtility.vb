@@ -1,4 +1,4 @@
-﻿Namespace Utilities.Interfaces
+﻿Namespace Utilities.ErrorHandling.Interfaces
 
     ''' <summary>
     ''' Defines methods for working with Win32 error codes and retrieving their friendly descriptions.

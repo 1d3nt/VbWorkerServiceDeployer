@@ -1,4 +1,4 @@
-﻿Namespace Utilities.Interfaces
+﻿Namespace Utilities.ErrorHandling.Interfaces
 
     ''' <summary>
     ''' Defines methods for handling Win32 errors.

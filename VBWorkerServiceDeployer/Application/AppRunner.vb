@@ -32,23 +32,72 @@
         ''' Runs the application.
         ''' </summary>
         ''' <remarks>
-        ''' The <see cref="Run"/> method retrieves the <see cref="IUserInputChecker"/> from the service provider,
+        ''' The <see cref="RunAsync"/> method retrieves the <see cref="IUserInputChecker"/> from the service provider,
         ''' uses it to get the friendly user account type, and prints it to the console. The method then waits 
         ''' for the user to press Enter before terminating.
         ''' </remarks>
-        Friend Sub Run()
+        Friend Async Function RunAsync() As Task
             Dim userInputChecker = _serviceProvider.GetService(Of IUserInputChecker)()
-            Dim serviceInstaller = _serviceProvider.GetService(Of IServiceInstaller)()
             Dim shouldProceed = userInputChecker.ShouldProceed()
+    
             If shouldProceed Then
-                Try
-                    Dim installationSuccess = serviceInstaller.InstallService()
-                    Console.WriteLine($"Service installation success: {installationSuccess}")
-                Catch ex As Exception
-                    Console.WriteLine($"Service installation failed: {ex.Message}")
-                End Try
+               ' InstallService()
+              '  Await DelayBeforeUninstall()
+               UninstallService()
             End If
+
             Console.ReadLine()
+        End Function
+
+        ''' <summary>
+        ''' Installs the service by using the <see cref="IServiceInstaller"/> retrieved from the service provider.
+        ''' </summary>
+        ''' <remarks>
+        ''' This method attempts to install the service and handles any exceptions that occur during the installation process.
+        ''' </remarks>
+        Private Sub InstallService()
+            Dim serviceInstaller = _serviceProvider.GetService(Of IServiceInstaller)()
+            Try
+                Dim installationSuccess = serviceInstaller.InstallService()
+                Console.WriteLine($"Service installation success: {installationSuccess}")
+            Catch ex As Exception
+                Console.WriteLine($"Service installation failed: {ex.Message}")
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Introduces a delay before proceeding to uninstall the service.
+        ''' </summary>
+        ''' <returns>A task that represents the asynchronous operation.</returns>
+        Private Async Function DelayBeforeUninstall() As Task
+            Const delayMilliseconds = 5000
+            PromptUserAboutDelay(delayMilliseconds)
+            Await AsynchronousProcessor.SimulateDelayedResponse(delayMilliseconds)
+        End Function
+
+        ''' <summary>
+        ''' Prompts the user about the delay duration.
+        ''' </summary>
+        ''' <param name="delayMilliseconds">The delay duration in milliseconds.</param>
+        Private Sub PromptUserAboutDelay(delayMilliseconds As Integer)
+            Dim userPrompter = _serviceProvider.GetService(Of IUserPrompter)()
+            userPrompter.Prompt($"The service will wait for {delayMilliseconds / 1000} seconds before proceeding to uninstall.")
+        End Sub
+
+        ''' <summary>
+        ''' Uninstalls the service by using the <see cref="IServiceUninstaller"/> retrieved from the service provider.
+        ''' </summary>
+        ''' <remarks>
+        ''' This method attempts to uninstall the service and handles any exceptions that occur during the uninstallation process.
+        ''' </remarks>
+        Private Sub UninstallService()
+            Dim serviceUninstaller = _serviceProvider.GetService(Of IServiceUninstaller)()
+            Try
+                Dim uninstallationSuccess = serviceUninstaller.UninstallService()
+                Console.WriteLine($"Service uninstallation success: {uninstallationSuccess}")
+            Catch ex As Exception
+                Console.WriteLine($"Service uninstallation failed: {ex.Message}")
+            End Try
         End Sub
     End Class
 End Namespace
