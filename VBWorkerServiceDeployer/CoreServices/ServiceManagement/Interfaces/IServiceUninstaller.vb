@@ -17,6 +17,6 @@
         ''' This method attempts to uninstall the service. Implementing classes should handle any necessary steps
         ''' to remove the service from the system.
         ''' </remarks>
-        Function UninstallService() As Boolean
+        Function UninstallServiceAsync() As Task(Of Boolean)
     End Interface
 End Namespace

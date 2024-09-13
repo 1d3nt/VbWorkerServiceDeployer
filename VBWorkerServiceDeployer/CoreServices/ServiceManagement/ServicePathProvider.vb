@@ -26,8 +26,9 @@
         ''' A <see cref="String"/> representing the name of the service.
         ''' </returns>
         Public Function GetServiceName() As String Implements IServicePathProvider.GetServiceName
-            Dim assemblyName As String = Reflection.Assembly.GetExecutingAssembly().GetName().Name
-            Return assemblyName
+            Dim servicePath As String = GetServicePath()
+            Dim serviceName As String = IO.Path.GetFileNameWithoutExtension(servicePath)
+            Return serviceName
         End Function
     End Class
 End Namespace

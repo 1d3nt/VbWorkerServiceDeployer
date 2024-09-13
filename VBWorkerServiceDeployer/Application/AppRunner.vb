@@ -39,11 +39,11 @@
         Friend Async Function RunAsync() As Task
             Dim userInputChecker = _serviceProvider.GetService(Of IUserInputChecker)()
             Dim shouldProceed = userInputChecker.ShouldProceed()
-    
+
             If shouldProceed Then
-               ' InstallService()
-              '  Await DelayBeforeUninstall()
-               UninstallService()
+                InstallService()
+                Await DelayBeforeUninstall()
+                UninstallService()
             End If
 
             Console.ReadLine()
@@ -70,7 +70,7 @@
         ''' </summary>
         ''' <returns>A task that represents the asynchronous operation.</returns>
         Private Async Function DelayBeforeUninstall() As Task
-            Const delayMilliseconds = 5000
+            Const delayMilliseconds = 30000
             PromptUserAboutDelay(delayMilliseconds)
             Await AsynchronousProcessor.SimulateDelayedResponse(delayMilliseconds)
         End Function
@@ -90,10 +90,10 @@
         ''' <remarks>
         ''' This method attempts to uninstall the service and handles any exceptions that occur during the uninstallation process.
         ''' </remarks>
-        Private Sub UninstallService()
+        Private Async Sub UninstallService()
             Dim serviceUninstaller = _serviceProvider.GetService(Of IServiceUninstaller)()
             Try
-                Dim uninstallationSuccess = serviceUninstaller.UninstallService()
+                Dim uninstallationSuccess = Await serviceUninstaller.UninstallServiceAsync()
                 Console.WriteLine($"Service uninstallation success: {uninstallationSuccess}")
             Catch ex As Exception
                 Console.WriteLine($"Service uninstallation failed: {ex.Message}")

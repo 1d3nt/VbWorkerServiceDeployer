@@ -222,9 +222,13 @@
         ''' This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="lpServiceName">
-        ''' The name of the service to be opened. This is the name specified by the <paramref name="lpServiceName"/> parameter of 
-        ''' the <see cref="CreateService"/> function when the service object was created, not the service display name.
+        ''' The name of the service to be opened. This is the name used when the service object was created, not its display name.
         ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' <remarks>
+        ''' We’ve tried several ways to marshal the <paramref name="lpServiceName"/> string, including various `MarshalAs` options, but all of them resulted in errors like code 1060 (ERROR_SERVICE_DOES_NOT_EXIST). 
+        ''' This suggests that the marshalling may not align with the expectations of the unmanaged function. If the function does not work with specific marshalling types, it's best to use default string handling and ensure 
+        ''' that the string encoding and format match the unmanaged API’s requirements. Note that this approach might allow partially trusted callers to interact with unmanaged code, which could pose security risks if not handled properly.
+        ''' </remarks>
         ''' </param>
         ''' <param name="dwDesiredAccess">
         ''' The access to the service. This parameter specifies the desired access rights, which can be a combination of values 
@@ -247,10 +251,11 @@
         ''' );
         ''' </code>
         ''' </remarks>
+        <SuppressMessage("Microsoft.Performance", "CA2101:Specify marshaling", Justification:="Various marshaling options were tested, but all resulted in errors (code 1060). The default string handling is used as it aligns with the unmanaged API requirements.")>
         <DllImport(ExternDll.Advapi32, SetLastError:=True)>
         Friend Shared Function OpenService(
             <[In]> hScManager As IntPtr,
-            <[In], MarshalAs(UnmanagedType.LPWStr)> lpServiceName As String,
+            <[In]> lpServiceName As String,
             <[In]> dwDesiredAccess As DesiredAccess
         ) As IntPtr
         End Function
@@ -302,15 +307,18 @@
         ''' <param name="hService">
         ''' A handle to the service. This handle is returned by the <see cref="OpenService"/> or <see cref="CreateService"/> function,
         ''' and it must have the <c>SERVICE_START</c> access right. For more information, see Service Security and Access Rights.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="dwNumServiceArgs">
         ''' The number of arguments passed to the service. This corresponds to the number of strings in the <paramref name="lpServiceArgVectors"/> array.
         ''' If <paramref name="lpServiceArgVectors"/> is <c>Nothing</c>, this parameter must be zero.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="lpServiceArgVectors">
         ''' An array of null-terminated strings to be passed to the service as arguments. If there are no arguments, 
         ''' this parameter can be <c>Nothing</c>. If provided, the first argument (lpServiceArgVectors[0]) is typically the name of the service, 
         ''' followed by any additional arguments (lpServiceArgVectors[1] through lpServiceArgVectors[dwNumServiceArgs-1]).
+        ''' This parameter is passed with the <c>[In]</c> attribute. Each string in the array must be marshaled correctly.
         ''' </param>
         ''' <returns>
         ''' <c>True</c> if the function succeeds; otherwise, <c>False</c>. Call <see cref="Marshal.GetLastWin32Error"/> to get extended error information.
@@ -319,7 +327,9 @@
         ''' The <c>StartService</c> function sends a start control request to a service. The service must be in the <c>SERVICE_STOPPED</c> state. 
         ''' After the service starts, its <c>ServiceMain</c> function is called with the arguments provided in the <paramref name="lpServiceArgVectors"/> array.
         ''' 
-        ''' In C++:
+        ''' For additional information, refer to the <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicea">StartServiceA</see> documentation.
+        ''' 
+        ''' The function signature in C++ is:
         ''' <code>
         ''' BOOL StartServiceA(
         '''   [in]           SC_HANDLE hService,
@@ -327,13 +337,77 @@
         '''   [in, optional] LPCSTR    *lpServiceArgVectors
         ''' );
         ''' </code>
-        ''' See <a href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicea">StartServiceA documentation</a> for more details.
         ''' </remarks>
         <DllImport(ExternDll.Advapi32, SetLastError:=True)>
         Friend Shared Function StartService(
-            <[in]> hService As IntPtr,
+            <[In]> hService As IntPtr,
             <[In]> dwNumServiceArgs As Integer,
             <[In], [Optional]> lpServiceArgVectors() As String
+        ) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        ''' <summary>
+        ''' Retrieves the current status of the specified service.
+        ''' </summary>
+        ''' <param name="hService">
+        ''' A handle to the service. The <see cref="OpenService"/> function returns this handle.
+        ''' This parameter is passed with the <c>[In]</c> attribute.
+        ''' </param>
+        ''' <param name="lpServiceStatus">
+        ''' A pointer to a <see cref="ServiceStatus"/> structure that receives the status information. 
+        ''' On successful completion, this structure contains information about the service's current status.
+        ''' This parameter is passed with the <c>[Out]</c> attribute.
+        ''' </param>
+        ''' <returns>
+        ''' If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. 
+        ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
+        ''' </returns>
+        ''' <remarks>
+        ''' The <paramref name="lpServiceStatus"/> parameter must be a valid pointer to a <see cref="ServiceStatus"/> structure.
+        ''' Ensure that the handle passed in <paramref name="hService"/> has appropriate access rights to query the service status.
+        ''' For additional information, refer to the <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-queryservicestatus">QueryServiceStatus</see> documentation.
+        ''' 
+        ''' The function signature in C++ is:
+        ''' <code>
+        ''' BOOL QueryServiceStatus(
+        '''   [in]  SC_HANDLE        hService,
+        '''   [out] LPSERVICE_STATUS lpServiceStatus
+        ''' );
+        ''' </code>
+        ''' </remarks>
+        <DllImport(ExternDll.Advapi32, SetLastError:=True)>
+        Friend Shared Function QueryServiceStatus(
+            <[In]> hService As IntPtr,
+            <[Out]> ByRef lpServiceStatus As ServiceStatus
+        ) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        ''' <summary>
+        ''' Marks the specified service for deletion from the service control manager database.
+        ''' </summary>
+        ''' <param name="hService">
+        ''' A handle to the service. This handle is returned by the <see cref="OpenService"/> or <see cref="CreateService"/> function, 
+        ''' and it must have the DELETE access right. For more information, see Service Security and Access Rights.
+        ''' </param>
+        ''' <returns>
+        ''' If the function succeeds, the return value is nonzero. Otherwise, call <see cref="Marshal.GetLastWin32Error"/> for extended error information.
+        ''' </returns>
+        ''' <remarks>
+        ''' The <c>DeleteService</c> function marks the specified service for deletion from the service control manager database.
+        ''' The service is not actually deleted until all open handles to the service are closed.
+        ''' 
+        ''' C++ Signature:
+        ''' <code>
+        ''' BOOL DeleteService(
+        '''   [in] SC_HANDLE Service
+        ''' );
+        ''' </code>
+        ''' For additional information, refer to the 
+        ''' <a href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-deleteservice">DeleteService documentation</a>.
+        ''' </remarks>
+        <DllImport(ExternDll.Advapi32, SetLastError:=True)>
+        Friend Shared Function DeleteService(
+            <[In]> hService As IntPtr
         ) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
     End Class

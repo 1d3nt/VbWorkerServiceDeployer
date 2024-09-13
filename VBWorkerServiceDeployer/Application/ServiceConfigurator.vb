@@ -166,11 +166,24 @@
         '''   </item>
         '''   <item>
         '''     <description>
+        '''       <see cref="IServiceStatusChecker"/> is implemented by <see cref="ServiceStatusChecker"/>.
+        '''       This service provides functionality to check the status of services.
+        '''     </description>
+        '''   </item>
+        ''' <item>
+        '''   <description>
+        '''     <see cref="IServiceDeleter"/> is implemented by <see cref="ServiceDeleter"/>.
+        '''     This service provides functionality to mark services for deletion from the service control manager database.
+        '''   </description>
+        ''' </item>
+        '''   <item>
+        '''     <description>
         '''       <see cref="IServiceUninstaller"/> is implemented by <see cref="ServiceUninstaller"/>.
         '''       This service handles the uninstallation of services.
         '''     </description>
         '''   </item>
         ''' </list>
+        ''' For additional information, refer to the <see href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.servicecollectionextensions.addservices">ServiceCollectionExtensions.AddServices</see> documentation.
         ''' </remarks>
         Private Shared Sub RegisterServiceManagementServices(services As IServiceCollection)
             Dim serviceManagementServices As New Dictionary(Of Type, Type) From {
@@ -180,6 +193,8 @@
                 {GetType(IServiceInstaller), GetType(ServiceInstaller)},
                 {GetType(IServiceStarter), GetType(ServiceStarter)},
                 {GetType(IServiceStopper), GetType(ServiceStopper)},
+                {GetType(IServiceStatusChecker), GetType(ServiceStatusChecker)},
+                {GetType(IServiceDeleter), GetType(ServiceDeleter)},
                 {GetType(IServiceUninstaller), GetType(ServiceUninstaller)}
             }
             AddServices(services, serviceManagementServices)

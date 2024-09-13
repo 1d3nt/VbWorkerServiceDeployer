@@ -14,7 +14,7 @@
     '''     <item><description><see cref="PauseContinue"/> corresponds to the constant <c>SERVICE_PAUSE_CONTINUE</c> in C++.</description></item>
     '''     <item><description><see cref="ChangeConfig"/> corresponds to the constant <c>SERVICE_CHANGE_CONFIG</c> in C++.</description></item>
     '''     <item><description><see cref="EnumerateDependents"/> corresponds to the constant <c>SERVICE_ENUMERATE_DEPENDENTS</c> in C++.</description></item>
-    '''     <item><description><see cref="None"/> corresponds to the constant <c>0</c> in C++.</description></item>
+    '''     <item><description><see cref="Delete"/> corresponds to the constant <c>SERVICE_DELETE</c> in C++.</description></item>
     '''     <item><description><see cref="All"/> corresponds to a combination of all relevant service access rights.</description></item>
     ''' </list>
     ''' <para>
@@ -69,9 +69,15 @@
         EnumerateDependents = &H8
 
         ''' <summary>
+        ''' Allows deleting the service.
+        ''' Corresponds to <c>SERVICE_DELETE</c> in C++.
+        ''' </summary>
+        Delete = &H10000
+
+        ''' <summary>
         ''' Combines all available access rights.
         ''' This value includes all the rights defined by other enumeration values.
         ''' </summary>
-        All = QueryStatus Or Start Or [Stop] Or PauseContinue Or ChangeConfig Or EnumerateDependents
+        All = QueryStatus Or Start Or [Stop] Or PauseContinue Or ChangeConfig Or EnumerateDependents Or Delete
     End Enum
 End Namespace
