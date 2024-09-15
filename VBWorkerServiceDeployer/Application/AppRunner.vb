@@ -6,6 +6,8 @@
     ''' <remarks>
     ''' The <see cref="AppRunner"/> class relies on dependency injection to obtain an <see cref="IServiceProvider"/> 
     ''' which is used to retrieve services throughout the application. The main functionality of the class is to
+    ''' run the application's core logic, including installing and uninstalling services.
+    ''' </remarks>
     Friend Class AppRunner
 
         ''' <summary>
@@ -68,7 +70,13 @@
         ''' <summary>
         ''' Introduces a delay before proceeding to uninstall the service.
         ''' </summary>
-        ''' <returns>A task that represents the asynchronous operation.</returns>
+        ''' <returns>
+        ''' A task that represents the asynchronous operation.
+        ''' </returns>
+        ''' <remarks>
+        ''' The <see cref="DelayBeforeUninstall"/> method prompts the user about the delay duration and then simulates a delay
+        ''' before proceeding to uninstall the service.
+        ''' </remarks>
         Private Async Function DelayBeforeUninstall() As Task
             Const delayMilliseconds = 30000
             PromptUserAboutDelay(delayMilliseconds)
@@ -79,6 +87,10 @@
         ''' Prompts the user about the delay duration.
         ''' </summary>
         ''' <param name="delayMilliseconds">The delay duration in milliseconds.</param>
+        ''' <remarks>
+        ''' The <see cref="PromptUserAboutDelay"/> method uses the <see cref="IUserPrompter"/> service to notify the user about
+        ''' the delay before uninstalling the service.
+        ''' </remarks>
         Private Sub PromptUserAboutDelay(delayMilliseconds As Integer)
             Dim userPrompter = _serviceProvider.GetService(Of IUserPrompter)()
             userPrompter.Prompt($"The service will wait for {delayMilliseconds / 1000} seconds before proceeding to uninstall.")
@@ -101,5 +113,3 @@
         End Sub
     End Class
 End Namespace
-
-

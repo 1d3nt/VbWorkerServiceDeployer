@@ -11,19 +11,23 @@
     Public Interface IErrorHandlingService
 
         ''' <summary>
-        ''' Handles Win32 errors by checking the validity of the service control manager handle 
-        ''' and throwing an exception with a detailed error message if the handle is invalid.
+        ''' Handles Win32 errors by checking if the service control manager handle is invalid, 
+        ''' retrieves the last Win32 error code, and throws an <see cref="InvalidOperationException"/> 
+        ''' with a detailed error message.
         ''' </summary>
         ''' <param name="serviceControlManager">
-        ''' A handle to the service control manager. This handle is checked for validity, and if invalid, 
-        ''' an exception is thrown with a detailed error message based on the last Win32 error code.
+        ''' A handle to the service control manager. If this handle is invalid, the method retrieves the 
+        ''' last Win32 error code and provides a detailed error description.
         ''' </param>
         ''' <remarks>
-        ''' Implementations of this method should retrieve the last Win32 error code when the 
-        ''' service control manager handle is invalid and throw an <see cref="InvalidOperationException"/> 
-        ''' with a descriptive error message. This allows for consistent error handling and reporting 
-        ''' in service control management operations.
+        ''' This method is used to manage and interpret errors related to the service control manager. 
+        ''' It retrieves the last Win32 error code using <see cref="IWin32ErrorHelper"/> and translates it 
+        ''' into a human-readable error description using <see cref="IWin32ErrorUtility"/>. An 
+        ''' <see cref="InvalidOperationException"/> is thrown if the service control manager handle is invalid.
         ''' </remarks>
+        ''' <exception cref="InvalidOperationException">
+        ''' Thrown when the service control manager handle is invalid, providing the error code and description.
+        ''' </exception>
         Sub HandleWin32Error(serviceControlManager As IntPtr)
     End Interface
 End Namespace

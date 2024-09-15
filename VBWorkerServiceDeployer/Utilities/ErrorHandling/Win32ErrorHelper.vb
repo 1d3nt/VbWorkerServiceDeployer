@@ -19,13 +19,14 @@
         ''' <summary>
         ''' Retrieves the last Win32 error code.
         ''' </summary>
-        ''' <returns>The last Win32 error code saved by the CLR.</returns>
+        ''' <returns>
+        ''' The last Win32 error code saved by the CLR. This code is typically retrieved after a P/Invoke call 
+        ''' to ensure it accurately reflects the error state of the unmanaged API call.
+        ''' </returns>
         ''' <remarks>
-        ''' The <see cref="Marshal.GetLastWin32Error"/> method should be used in managed code 
-        ''' to retrieve error information after a P/Invoke call. 
-        ''' This ensures the error code returned is reliable, as the CLR saves the result 
-        ''' of <c>GetLastError</c> immediately after the unmanaged API call completes, preventing 
-        ''' overwrites by other system calls made by the CLR.
+        ''' The <see cref="Marshal.GetLastWin32Error"/> method should be used to retrieve the error code. 
+        ''' This is important because the CLR saves the result of <c>GetLastError</c> immediately after the unmanaged API call completes, 
+        ''' preventing it from being overwritten by subsequent system calls made by the CLR.
         ''' </remarks>
         Friend Function GetLastWin32Error() As Integer Implements IWin32ErrorHelper.GetLastWin32Error
             Return Marshal.GetLastWin32Error()

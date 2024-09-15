@@ -8,7 +8,7 @@
     ''' <see cref="IWin32ErrorHelper"/> and <see cref="IWin32ErrorUtility"/> to handle Win32 errors 
     ''' by retrieving error codes and their corresponding descriptions.
     ''' </remarks>
-    Public Class ErrorHandlingService
+    Friend Class ErrorHandlingService
         Implements IErrorHandlingService
 
         ''' <summary>
@@ -59,7 +59,7 @@
         ''' <exception cref="InvalidOperationException">
         ''' Thrown when the service control manager handle is invalid, providing the error code and description.
         ''' </exception>
-        Public Sub HandleWin32Error(serviceControlManager As IntPtr) Implements IErrorHandlingService.HandleWin32Error
+        Friend Sub HandleWin32Error(serviceControlManager As IntPtr) Implements IErrorHandlingService.HandleWin32Error
             If Equals(serviceControlManager, NativeMethods.NullHandleValue) Then
                 Throw CreateWin32Exception()
             End If
