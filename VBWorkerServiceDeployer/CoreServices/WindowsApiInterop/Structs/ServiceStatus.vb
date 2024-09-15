@@ -6,10 +6,9 @@
     ''' <remarks>
     ''' The <see cref="ServiceStatus"/> structure contains information about the current state of a service and is used by the service control manager 
     ''' and the service to communicate service status information.
-    ''' </remarks>
-    ''' <example>
-    ''' In C++: <code>typedef struct _SERVICE_STATUS { ... } SERVICE_STATUS, *LPSERVICE_STATUS;</code>
-    ''' </example>
+    ''' 
+    ''' This structure corresponds to the <see cref="ServiceStatus"/> structure in the Windows API:
+    ''' 
     ''' <list type="bullet">
     ''' <item><description><see cref="ServiceStatus.dwServiceType"/>: The type of service. In C++: <code>DWORD dwServiceType;</code></description></item>
     ''' <item><description><see cref="ServiceStatus.dwCurrentState"/>: The current state of the service. In C++: <code>DWORD dwCurrentState;</code></description></item>
@@ -19,8 +18,31 @@
     ''' <item><description><see cref="ServiceStatus.dwCheckPoint"/>: Indicates the progress of the service's operation. In C++: <code>DWORD dwCheckPoint;</code></description></item>
     ''' <item><description><see cref="ServiceStatus.dwWaitHint"/>: Specifies the estimated time required to complete the requested operation, in milliseconds. In C++: <code>DWORD dwWaitHint;</code></description></item>
     ''' </list>
+    ''' 
+    ''' The <see cref="ServiceStatus"/> structure uses <c>LayoutKind.Sequential</c> to ensure that the fields are laid out
+    ''' in the same order as defined in the structure. This ensures compatibility with the unmanaged API.
+    ''' 
+    ''' <example>
+    ''' In C++:
+    ''' <code>
+    ''' typedef struct _SERVICE_STATUS {
+    '''     DWORD dwServiceType;
+    '''     DWORD dwCurrentState;
+    '''     DWORD dwControlsAccepted;
+    '''     DWORD dwWin32ExitCode;
+    '''     DWORD dwServiceSpecificExitCode;
+    '''     DWORD dwCheckPoint;
+    '''     DWORD dwWaitHint;
+    ''' } SERVICE_STATUS, *LPSERVICE_STATUS;
+    ''' </code>
+    ''' </example>
+    ''' 
+    ''' For additional details on the <see cref="ServiceStatus"/> structure, refer to:
+    ''' <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/ns-winsvc-service_status">SERVICE_STATUS Structure</see>.
+    ''' </remarks>
+
     <StructLayout(LayoutKind.Sequential)>
-    Public Structure ServiceStatus
+    Friend Structure ServiceStatus
 
         ''' <summary>
         ''' The type of service. This member can be a combination of the following values:
@@ -36,7 +58,7 @@
         ''' <example>
         ''' In C++: <code>DWORD dwServiceType;</code>
         ''' </example>
-        Public dwServiceType As UInteger
+        Friend dwServiceType As UInteger
 
         ''' <summary>
         ''' The current state of the service. This member can be one of the following values:
@@ -55,7 +77,7 @@
         ''' <example>
         ''' In C++: <code>DWORD dwCurrentState;</code>
         ''' </example>
-        Public dwCurrentState As UInteger
+        Friend dwCurrentState As UInteger
 
         ''' <summary>
         ''' The types of control code that the service can accept. This member can be a combination of the following values:
@@ -71,7 +93,7 @@
         ''' <example>
         ''' In C++: <code>DWORD dwControlsAccepted;</code>
         ''' </example>
-        Public dwControlsAccepted As UInteger
+        Friend dwControlsAccepted As UInteger
 
         ''' <summary>
         ''' The service-specific error code that is returned when the service stops. This code is specific to the service and is defined by the service itself.
@@ -82,7 +104,7 @@
         ''' <example>
         ''' In C++: <code>DWORD dwWin32ExitCode;</code>
         ''' </example>
-        Public dwWin32ExitCode As UInteger
+        Friend dwWin32ExitCode As UInteger
 
         ''' <summary>
         ''' The service-specific error code that is returned when the service stops. This code is specific to the service and is defined by the service itself.
@@ -93,7 +115,7 @@
         ''' <example>
         ''' In C++: <code>DWORD dwServiceSpecificExitCode;</code>
         ''' </example>
-        Public dwServiceSpecificExitCode As UInteger
+        Friend dwServiceSpecificExitCode As UInteger
 
         ''' <summary>
         ''' The service's progress toward completing its start, stop, pause, or continue operation. This member is used by the service to report progress.
@@ -104,7 +126,7 @@
         ''' <example>
         ''' In C++: <code>DWORD dwCheckPoint;</code>
         ''' </example>
-        Public dwCheckPoint As UInteger
+        Friend dwCheckPoint As UInteger
 
         ''' <summary>
         ''' The estimated time required to complete the requested service control operation, in milliseconds. This value is used by the service control manager to determine when to check the service status.
@@ -115,6 +137,6 @@
         ''' <example>
         ''' In C++: <code>DWORD dwWaitHint;</code>
         ''' </example>
-        Public dwWaitHint As UInteger
+        Friend dwWaitHint As UInteger
     End Structure
 End Namespace
