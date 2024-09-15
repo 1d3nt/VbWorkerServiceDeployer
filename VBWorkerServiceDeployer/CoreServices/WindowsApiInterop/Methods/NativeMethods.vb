@@ -5,7 +5,7 @@
     ''' This class contains P/Invoke declarations for various functions used for process and token management.
     ''' </summary>
     ''' <remarks>
-    ''' The <see cref="NativeMethods"/> class uses the <c>DllImport</c> attribute to define methods that are imported 
+    ''' The <see cref="NativeMethods"/> class uses the <see cref="DllImportattribute"/> to define methods that are imported 
     ''' from unmanaged DLLs. These methods are used to interact with the Windows operating system at a low level.
     ''' 
     ''' The <c>SuppressUnmanagedCodeSecurity</c> attribute is applied to this class to improve performance when
@@ -20,7 +20,8 @@
         ''' Represents a null handle value used in P/Invoke calls.
         ''' </summary>
         ''' <remarks>
-        ''' This field is used to represent a null handle (IntPtr.Zero) in P/Invoke calls to unmanaged code.
+        ''' This field is used to represent a null handle (<c>IntPtr.Zero</c>) in P/Invoke calls to unmanaged code.
+        ''' This field is passed with the <c>[In]</c> attribute when used in method parameters to signify that it is a null handle.
         ''' </remarks>
         Friend Shared ReadOnly NullHandleValue As IntPtr = IntPtr.Zero
 
@@ -99,7 +100,7 @@
         ''' <param name="hScObject">
         ''' A handle to the service control manager object or the service object to close. Handles to service control manager objects are 
         ''' returned by the <see cref="OpenSCManager"/> function, and handles to service objects are returned by either the <see cref="OpenService"/> 
-        ''' or <see cref="CreateService"/> function.
+        ''' or <see cref="CreateService"/> function. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <returns>
         ''' If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. To get extended error information, 
@@ -117,7 +118,7 @@
         ''' </remarks>
         <DllImport(ExternDll.Advapi32, SetLastError:=True)>
         Friend Shared Function CloseServiceHandle(
-            hScObject As IntPtr
+           <[In]> hScObject As IntPtr
         ) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
@@ -126,50 +127,49 @@
         ''' </summary>
         ''' <param name="hScManager">
         ''' A handle to the service control manager database. This handle is returned by the <c>OpenSCManager</c> function and must have the 
-        ''' <see cref="ServiceManagerAccessFlags.CreateService"/> access right.
+        ''' <see cref="ServiceManagerAccessFlags.CreateService"/> access right. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="lpServiceName">
         ''' The name of the service to install. The maximum string length is 256 characters. The service control manager database preserves 
         ''' the case of the characters, but service name comparisons are always case-insensitive. Forward-slash (/) and backslash (\) are 
-        ''' not valid service name characters.
+        ''' not valid service name characters. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="lpDisplayName">
         ''' The display name to be used by user interface programs to identify the service. This string has a maximum length of 256 characters. 
-        ''' The name is case-preserved in the service control manager. Display name comparisons are always case-insensitive.
+        ''' The name is case-preserved in the service control manager. Display name comparisons are always case-insensitive. This parameter is passed with the <c>[In, Optional]</c> attribute.
         ''' </param>
         ''' <param name="dwDesiredAccess">
         ''' The access to the service. Before granting the requested access, the system checks the access token of the calling process. For a list 
-        ''' of values, see <see cref="DesiredAccess"/> for Service Security and Access Rights.
+        ''' of values, see <see cref="DesiredAccess"/> for Service Security and Access Rights. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="dwServiceType">
-        ''' The service type. This parameter can be one of the values defined in <see cref="ServiceType"/>. 
+        ''' The service type. This parameter can be one of the values defined in <see cref="ServiceType"/>. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="dwStartType">
-        ''' The service start options. This parameter can be one of the values defined in <see cref="StartType"/>.
+        ''' The service start options. This parameter can be one of the values defined in <see cref="StartType"/>. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="dwErrorControl">
-        ''' The severity of the error, and action taken, if this service fails to start. This parameter can be one of the values defined in <see cref="ServiceErrorControlFlags"/>.
+        ''' The severity of the error, and action taken, if this service fails to start. This parameter can be one of the values defined in <see cref="ServiceErrorControlFlags"/>. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <param name="lpBinaryPathName">
-        ''' The fully qualified path to the service binary file. If the path contains a space, it must be quoted so that it is correctly interpreted.
+        ''' The fully qualified path to the service binary file. If the path contains a space, it must be quoted so that it is correctly interpreted. This parameter is passed with the <c>[In, Optional]</c> attribute.
         ''' </param>
         ''' <param name="lpLoadOrderGroup">
-        ''' The names of the load ordering group of which this service is a member. Specify <c>Nothing</c> or an empty string if the service does not belong to a group.
+        ''' The names of the load ordering group of which this service is a member. Specify <c>Nothing</c> or an empty string if the service does not belong to a group. This parameter is passed with the <c>[In, Optional]</c> attribute.
         ''' </param>
         ''' <param name="lpdwTagId">
-        ''' A pointer to a variable that receives a tag value that is unique in the group specified in the <c>lpLoadOrderGroup</c> parameter. 
-        ''' Specify <c>Nothing</c> if you are not changing the existing tag.
+        ''' A pointer to a variable that receives a tag value that is unique in the group specified in the <c>lpLoadOrderGroup</c> parameter. Specify <c>Nothing</c> if you are not changing the existing tag. This parameter is passed with the <c>[Out, Optional]</c> attribute.
         ''' </param>
         ''' <param name="lpDependencies">
         ''' A pointer to a double null-terminated array of null-separated names of services or load ordering groups that the system must start before 
-        ''' this service. Specify <c>Nothing</c> or an empty string if the service has no dependencies.
+        ''' this service. Specify <c>Nothing</c> or an empty string if the service has no dependencies. This parameter is passed with the <c>[In, Optional]</c> attribute.
         ''' </param>
         ''' <param name="lpServiceStartName">
         ''' The name of the account under which the service should run. If the service type is <see cref="ServiceType.Win32OwnProcess"/>, use an account name in the 
-        ''' form <c>DomainName\UserName</c>.
+        ''' form <c>DomainName\UserName</c>. This parameter is passed with the <c>[In, Optional]</c> attribute.
         ''' </param>
         ''' <param name="lpPassword">
-        ''' The password to the account name specified by the <c>lpServiceStartName</c> parameter.
+        ''' The password to the account name specified by the <c>lpServiceStartName</c> parameter. This parameter is passed with the <c>[In, Optional]</c> attribute.
         ''' </param>
         ''' <returns>
         ''' If the function succeeds, the return value is a handle to the service.
@@ -387,7 +387,7 @@
         ''' </summary>
         ''' <param name="hService">
         ''' A handle to the service. This handle is returned by the <see cref="OpenService"/> or <see cref="CreateService"/> function, 
-        ''' and it must have the DELETE access right. For more information, see Service Security and Access Rights.
+        ''' and it must have the DELETE access right. For more information, see Service Security and Access Rights. This parameter is passed with the <c>[In]</c> attribute.
         ''' </param>
         ''' <returns>
         ''' If the function succeeds, the return value is nonzero. Otherwise, call <see cref="Marshal.GetLastWin32Error"/> for extended error information.
@@ -405,6 +405,7 @@
         ''' For additional information, refer to the 
         ''' <a href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-deleteservice">DeleteService documentation</a>.
         ''' </remarks>
+
         <DllImport(ExternDll.Advapi32, SetLastError:=True)>
         Friend Shared Function DeleteService(
             <[In]> hService As IntPtr

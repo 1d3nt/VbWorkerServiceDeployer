@@ -19,7 +19,10 @@
         ''' If it is not equal, the method proceeds to close the handle by calling the <see cref="NativeMethods.CloseHandle"/> method. 
         ''' If the handle is equal to <see cref="NativeMethods.NullHandleValue"/>, which indicates an invalid or uninitialized handle, 
         ''' the method skips the closing operation.
+        ''' 
+        ''' The <see cref="UsedImplicitlyAttribute"/> is applied to this method for completeness, even though it is not used in this project.
         ''' </remarks>
+        <UsedImplicitly()>
         Friend Shared Sub CloseTokenHandleIfNotNull(tokenHandle As IntPtr)
             If Not Equals(tokenHandle, NativeMethods.NullHandleValue) Then
                 NativeMethods.CloseHandle(tokenHandle)
