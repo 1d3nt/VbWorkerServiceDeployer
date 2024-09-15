@@ -8,6 +8,7 @@
     ''' <see cref="IWin32ErrorHelper"/> and <see cref="IWin32ErrorUtility"/> to handle Win32 errors 
     ''' by retrieving error codes and their corresponding descriptions.
     ''' </remarks>
+    ''' <seealso cref="IErrorHandlingService"/>
     Friend Class ErrorHandlingService
         Implements IErrorHandlingService
 

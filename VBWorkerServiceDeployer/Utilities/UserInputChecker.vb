@@ -7,8 +7,27 @@
     ''' This class implements the <see cref="IUserInputChecker"/> interface and is used to determine whether the user wants to proceed
     ''' based on their response.
     ''' </remarks>
-    Public Class UserInputChecker
+    ''' <seealso cref="IUserInputChecker"/>
+    Friend Class UserInputChecker
         Implements IUserInputChecker
+
+        ''' <summary>
+        ''' The confirmation message displayed to the user when prompting them to proceed with the installation of the service.
+        ''' </summary>
+        ''' <remarks>
+        ''' This constant holds the message that is shown to the user to confirm whether they would like to proceed with the installation
+        ''' of the service. The user is expected to enter 'Y' to indicate their consent to proceed.
+        ''' </remarks>
+        Private Const ConfirmationMessage As String = "Please confirm whether you would like to proceed with the installation of the service by entering 'Y'"
+
+        ''' <summary>
+        ''' The character that indicates user confirmation to proceed with the installation.
+        ''' </summary>
+        ''' <remarks>
+        ''' This constant holds the character 'Y', which is used to determine if the user has confirmed their intention to proceed
+        ''' with the installation of the service.
+        ''' </remarks>
+        Private Const ConfirmationChar As String = "Y"
 
         ''' <summary>
         ''' The input reader used to read user input.
@@ -42,7 +61,15 @@
         ''' <returns>
         ''' <c>True</c> if the user inputs 'Y' (case-insensitive) to indicate they want to proceed; otherwise, <c>False</c>.
         ''' </returns>
-        Public Function ShouldProceed() As Boolean Implements IUserInputChecker.ShouldProceed
+        ''' <remarks>
+        ''' This method prompts the user with a confirmation message and reads their input to determine whether they wish to continue
+        ''' with actions such as installing a service. The method returns <c>True</c> if the input matches the confirmation character 'Y'
+        ''' (case-insensitive), indicating user consent. Any other input will result in <c>False</c>.
+        ''' 
+        ''' The <see cref="ShouldProceed"/> method is crucial for interactive setup processes where user consent is required before performing certain actions.
+        ''' </remarks>
+        ''' <seealso cref="IUserInputChecker.ShouldProceed"/>
+        Friend Function ShouldProceed() As Boolean Implements IUserInputChecker.ShouldProceed
             PromptUser()
             Dim input As String = GetUserInput()
             Return IsConfirmation(input)
@@ -52,7 +79,7 @@
         ''' Prompts the user with a confirmation message.
         ''' </summary>
         Private Sub PromptUser()
-            _prompter.Prompt("Please confirm whether you would like to proceed with the installation of the service by entering 'Y'")
+            _prompter.Prompt(ConfirmationMessage)
         End Sub
 
         ''' <summary>
@@ -68,10 +95,10 @@
         ''' </summary>
         ''' <param name="input">The input string from the user.</param>
         ''' <returns>
-        ''' <c>True</c> if the input is 'Y' (case-insensitive); otherwise, <c>False</c>.
+        ''' <c>True</c> if the input is equal to the confirmation character 'Y' (case-insensitive); otherwise, <c>False</c>.
         ''' </returns>
         Private Shared Function IsConfirmation(input As String) As Boolean
-            Return String.Equals(input, "Y", StringComparison.OrdinalIgnoreCase)
+            Return String.Equals(input, ConfirmationChar, StringComparison.OrdinalIgnoreCase)
         End Function
     End Class
 End Namespace

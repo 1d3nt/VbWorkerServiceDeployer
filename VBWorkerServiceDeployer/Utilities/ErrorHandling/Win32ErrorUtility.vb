@@ -14,6 +14,7 @@
     ''' For more information on the <see cref="Dictionary(Of TKey, TValue)"/> class, refer to the 
     ''' <a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Microsoft Documentation</a>.
     ''' </remarks>
+    ''' <seealso cref="IWin32ErrorUtility"/>
     Friend Class Win32ErrorUtility
         Implements IWin32ErrorUtility
 

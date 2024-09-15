@@ -8,6 +8,7 @@
     ''' Implementations of this interface should define how to process and respond to errors 
     ''' encountered during Win32 API operations, particularly in relation to service control management.
     ''' </remarks>
+    ''' <seealso cref="ErrorhandlingService"/>
     Public Interface IErrorHandlingService
 
         ''' <summary>

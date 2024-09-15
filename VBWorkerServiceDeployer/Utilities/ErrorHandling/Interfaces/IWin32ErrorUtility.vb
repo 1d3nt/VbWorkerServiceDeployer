@@ -8,6 +8,7 @@
     ''' for Win32 error codes. Implementations of this interface should provide a dictionary 
     ''' lookup or similar mechanism to map error codes to descriptions.
     ''' </remarks>
+    ''' <seealso cref="Win32ErrorUtility"/>
     Public Interface IWin32ErrorUtility
 
         ''' <summary>

@@ -13,6 +13,7 @@
     ''' Archived Version</a> or the 
     ''' <a href="http://blogs.msdn.com/b/adam_nathan/archive/2003/04/25/56643.aspx">Original URL</a>.
     ''' </remarks>
+    ''' <seealso cref="IWin32ErrorHelper"/>
     Friend Class Win32ErrorHelper
         Implements IWin32ErrorHelper
 
