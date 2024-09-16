@@ -33,8 +33,12 @@
 
         ''' <summary>
         ''' No access rights specified.
-        ''' Corresponds to <c>0</c> in C++.
         ''' </summary>
+        ''' <remarks>
+        ''' Corresponds to <c>0</c> in C++. This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code, 
+        ''' but is included for completeness and potential future use.
+        ''' </remarks>
+        <UsedImplicitly>
         None = 0
 
         ''' <summary>
