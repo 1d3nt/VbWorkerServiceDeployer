@@ -19,6 +19,7 @@
     ''' performs the required actions to install the service and return an appropriate status indicating 
     ''' the success or failure of the operation.
     ''' </remarks>
+    ''' <seealso cref="ServiceInstaller"/>
     Public Interface IServiceInstaller
 
         ''' <summary>
@@ -28,7 +29,7 @@
         ''' <c>True</c> if the service was installed successfully; otherwise, <c>False</c>.
         ''' </returns>
         ''' <remarks>
-        ''' The <see cref="IServiceInstaller.InstallService"/> method should implement the logic required 
+        ''' The <see cref="InstallService"/> method should implement the logic required 
         ''' to install a service, including any necessary configuration and setup steps. The method is 
         ''' expected to return <c>True</c> upon successful installation of the service, indicating that 
         ''' the service has been correctly set up and registered. If the installation fails or encounters 

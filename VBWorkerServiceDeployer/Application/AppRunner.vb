@@ -78,7 +78,7 @@
         ''' before proceeding to uninstall the service.
         ''' </remarks>
         Private Async Function DelayBeforeUninstall() As Task
-            Const delayMilliseconds = 30000
+            Const delayMilliseconds = 10000
             PromptUserAboutDelay(delayMilliseconds)
             Await AsynchronousProcessor.SimulateDelayedResponse(delayMilliseconds)
         End Function

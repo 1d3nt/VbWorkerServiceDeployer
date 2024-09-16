@@ -3,7 +3,13 @@
     ''' <summary>
     ''' Handles opening and closing the Service Control Manager.
     ''' </summary>
-    Public Class ServiceControlManager
+    ''' <remarks>
+    ''' This class implements the <see cref="IServiceControlManager"/> interface and provides
+    ''' methods for opening and closing the Service Control Manager (SCM) and services. 
+    ''' It also uses the <see cref="IErrorHandlingService"/> to handle errors.
+    ''' </remarks>
+    ''' <seealso cref="IServiceControlManager"/>
+    Friend Class ServiceControlManager
         Implements IServiceControlManager
 
         ''' <summary>
@@ -35,6 +41,10 @@
         ''' <param name="errorHandlingService">
         ''' An instance of <see cref="IErrorHandlingService"/> used for handling errors.
         ''' </param>
+        ''' <remarks>
+        ''' The constructor sets up the error handling service that will be used to handle
+        ''' Win32 errors encountered during SCM operations.
+        ''' </remarks>
         Public Sub New(errorHandlingService As IErrorHandlingService)
             _errorHandlingService = errorHandlingService
         End Sub
@@ -43,8 +53,13 @@
         ''' Opens the Service Control Manager with the specified access rights.
         ''' </summary>
         ''' <param name="desiredAccess">The desired access level for the Service Control Manager.</param>
-        ''' <returns>An IntPtr representing the handle to the Service Control Manager.</returns>
-        Public Function Open(desiredAccess As ServiceManagerAccessFlags) As IntPtr Implements IServiceControlManager.Open
+        ''' <returns>An <see cref="IntPtr"/> representing the handle to the Service Control Manager.</returns>
+        ''' <remarks>
+        ''' This method wraps the <see cref="NativeMethods.OpenSCManager"/> function from the Windows API.
+        ''' <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openscmanagerw"/>
+        ''' The method uses the local machine name and default database for the SCM.
+        ''' </remarks>
+        Friend Function Open(desiredAccess As ServiceManagerAccessFlags) As IntPtr Implements IServiceControlManager.Open
             Dim serviceControlManager = NativeMethods.OpenSCManager(LocalMachineName, DefaultScmDatabase, desiredAccess)
             _errorHandlingService.HandleWin32Error(serviceControlManager)
             Return serviceControlManager
@@ -56,8 +71,12 @@
         ''' <param name="scmHandle">The handle to the Service Control Manager.</param>
         ''' <param name="serviceName">The name of the service to open.</param>
         ''' <param name="desiredAccess">The desired access level for the service.</param>
-        ''' <returns>An IntPtr representing the handle to the service.</returns>
-        Public Function OpenService(scmHandle As IntPtr, serviceName As String, desiredAccess As DesiredAccess) As IntPtr Implements IServiceControlManager.OpenService
+        ''' <returns>An <see cref="IntPtr"/> representing the handle to the service.</returns>
+        ''' <remarks>
+        ''' This method wraps the <see cref="NativeMethods.OpenService"/> function from the Windows API.
+        ''' <see href="https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openservicew"/>
+        ''' </remarks>
+        Friend Function OpenService(scmHandle As IntPtr, serviceName As String, desiredAccess As DesiredAccess) As IntPtr Implements IServiceControlManager.OpenService
             Dim serviceHandle = NativeMethods.OpenService(scmHandle, serviceName, desiredAccess)
             _errorHandlingService.HandleWin32Error(serviceHandle)
             Return serviceHandle
@@ -67,7 +86,11 @@
         ''' Closes the Service Control Manager handle if it is not null.
         ''' </summary>
         ''' <param name="serviceControlManager">The handle to the Service Control Manager.</param>
-        Public Sub Close(serviceControlManager As IntPtr) Implements IServiceControlManager.Close
+        ''' <remarks>
+        ''' This method uses <see cref="HandleManager.CloseServiceHandleIfNotNull"/> to ensure that the handle
+        ''' is properly closed if it is not null.
+        ''' </remarks>
+        Friend Sub Close(serviceControlManager As IntPtr) Implements IServiceControlManager.Close
             HandleManager.CloseServiceHandleIfNotNull(serviceControlManager)
         End Sub
     End Class
