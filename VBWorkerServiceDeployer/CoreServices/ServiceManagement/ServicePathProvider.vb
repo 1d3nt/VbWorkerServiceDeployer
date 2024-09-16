@@ -7,14 +7,14 @@
     ''' The <see cref="ServicePathProvider"/> class implements the <see cref="IServicePathProvider"/> interface
     ''' and provides the actual logic for retrieving the paths and names of services to be installed.
     ''' </remarks>
-    Public Class ServicePathProvider
+    Friend Class ServicePathProvider
         Implements IServicePathProvider
 
         ''' <summary>
         ''' Gets the full path to the service executable.
         ''' </summary>
         ''' <returns>The full path to the service executable.</returns>
-        Public Function GetServicePath() As String Implements IServicePathProvider.GetServicePath
+        Friend Function GetServicePath() As String Implements IServicePathProvider.GetServicePath
             ' Logic to obtain the service path
             Return "C:\Users\Owner\Desktop\ServiceTest\WorkerService\VbWorkerServicePinvokeLauncher.exe"
         End Function
@@ -25,7 +25,7 @@
         ''' <returns>
         ''' A <see cref="String"/> representing the name of the service.
         ''' </returns>
-        Public Function GetServiceName() As String Implements IServicePathProvider.GetServiceName
+        Friend Function GetServiceName() As String Implements IServicePathProvider.GetServiceName
             Dim servicePath As String = GetServicePath()
             Dim serviceName As String = IO.Path.GetFileNameWithoutExtension(servicePath)
             Return serviceName

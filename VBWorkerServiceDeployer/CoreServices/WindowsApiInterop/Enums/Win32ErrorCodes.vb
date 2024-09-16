@@ -6,6 +6,7 @@
     ''' <remarks>
     ''' This enum includes a selection of standard Windows error codes that are commonly encountered.
     ''' Each value corresponds to a specific error condition as defined in the Windows API.
+    ''' 
     ''' <para>
     ''' The following bullet points map the <see cref="Win32ErrorCode"/> enum values to their C++ equivalents:
     ''' <list type="bullet">
@@ -22,8 +23,10 @@
     '''     <item><description><see cref="BufferTooSmall"/> corresponds to the constant <c>ERROR_INSUFFICIENT_BUFFER</c> in C++.</description></item>
     '''     <item><description><see cref="PrivilegeNotHeld"/> corresponds to the constant <c>ERROR_PRIVILEGE_NOT_HELD</c> in C++.</description></item>
     '''     <item><description><see cref="ServiceDoesNotExist"/> corresponds to the constant <c>ERROR_SERVICE_DOES_NOT_EXIST</c> in C++.</description></item>
+    '''     <item><description><see cref="Unknown"/> represents an unknown Win32 error code that does not map to any known error constants.</description></item>
     ''' </list>
     ''' </para>
+    ''' 
     ''' For more information about error codes, refer to:
     ''' <see href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-">System Error Codes (0-499)</see>.
     ''' </remarks>
@@ -138,9 +141,8 @@
         ''' </summary>
         ''' <remarks>
         ''' This value is used to indicate that the error code does not correspond to any predefined 
-        ''' Win32 error code in the enumeration. This can be useful for handling unexpected or 
-        ''' unrecognized error codes that may arise. It serves as a fallback when an integer error code 
-        ''' does not match any of the known values in the <see cref="Win32ErrorCode"/> enumeration.
+        ''' Win32 error code in the enumeration. It serves as a fallback for handling unexpected or 
+        ''' unrecognized error codes that may arise. This is useful for robust error handling and debugging.
         ''' </remarks>
         Unknown = -1
     End Enum
