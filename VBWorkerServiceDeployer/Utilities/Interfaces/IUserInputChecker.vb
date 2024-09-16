@@ -30,7 +30,6 @@
         ''' The <see cref="ShouldProceed"/> method helps in making runtime decisions based on user feedback and is crucial
         ''' for interactive setup processes where user consent is required before performing certain actions.
         ''' </remarks>
-        ''' <seealso cref="UserInputChecker"/>
         Function ShouldProceed() As Boolean
     End Interface
 End Namespace
