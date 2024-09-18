@@ -4,9 +4,14 @@
     ''' Defines the contract for obtaining service paths and names.
     ''' </summary>
     ''' <remarks>
-    ''' The <see cref="IServicePathProvider"/> interface provides methods for retrieving the paths and names
-    ''' of services to be installed. Implementing classes should provide the actual logic for obtaining these details.
+    ''' The <see cref="IServicePathProvider"/> interface provides methods for retrieving 
+    ''' the paths and names of services to be installed. Implementing classes should provide the actual logic for obtaining these details.
+    ''' 
+    ''' The <see cref="IServicePathProvider.GetServicePath"/> method is used to retrieve 
+    ''' the full path to the service executable, while the <see cref="IServicePathProvider.GetServiceName"/> 
+    ''' method returns the service's name.
     ''' </remarks>
+    ''' <seealso cref="ServicePathProvider"/>
     Public Interface IServicePathProvider
 
         ''' <summary>

@@ -3,6 +3,12 @@
     ''' <summary>
     ''' Handles the uninstallation of services.
     ''' </summary>
+    ''' <seealso cref="IServiceUninstaller"/>
+    ''' <remarks>
+    ''' The <see cref="ServiceUninstaller"/> class implements the <see cref="IServiceUninstaller"/> interface to provide
+    ''' the logic required for uninstalling a service. This class relies on several dependencies to manage the
+    ''' uninstallation process, including stopping the service, checking its status, and deleting it.
+    ''' </remarks>
     Public Class ServiceUninstaller
         Implements IServiceUninstaller
 
@@ -57,7 +63,7 @@
         ''' It was found that using <see cref="DesiredAccess.All"/> is required for the delete operation to succeed, even though
         ''' it grants broader access than stopping alone.
         ''' </remarks>
-        Public Async Function UninstallServiceAsync() As Task(Of Boolean) Implements IServiceUninstaller.UninstallServiceAsync
+        Friend Async Function UninstallServiceAsync() As Task(Of Boolean) Implements IServiceUninstaller.UninstallServiceAsync
             Dim serviceName As String = _servicePathProvider.GetServiceName()
             Dim serviceControlManager As IntPtr = NativeMethods.NullHandleValue
             Dim serviceHandle As IntPtr = NativeMethods.NullHandleValue
@@ -82,16 +88,23 @@
         ''' </summary>
         ''' <param name="serviceHandle">The handle to the service.</param>
         ''' <returns><c>True</c> if the service was stopped and deleted successfully; otherwise, <c>False</c>.</returns>
+        ''' <remarks>
+        ''' This method first attempts to stop the service using <see cref="IServiceStopper.StopService"/>. It then waits for the service
+        ''' to stop using <see cref="IServiceStatusChecker.WaitForServiceToStopAsync"/> before proceeding to delete it using
+        ''' <see cref="IServiceDeleter.DeleteService"/>.
+        ''' </remarks>
         Private Async Function StopAndDeleteServiceAsync(serviceHandle As IntPtr) As Task(Of Boolean)
-            _serviceStopper.StopService(serviceHandle)
-
-            Dim serviceStopped As Boolean = Await _serviceStatusChecker.WaitForServiceToStopAsync(serviceHandle)
-            If Not serviceStopped Then
-                Return False
-            End If
-
-            _serviceDeleter.DeleteService(serviceHandle)
-            Return True
+            Try
+                _serviceStopper.StopService(serviceHandle)
+                Dim serviceStopped As Boolean = Await _serviceStatusChecker.WaitForServiceToStopAsync(serviceHandle)
+                If Not serviceStopped Then
+                    Return False
+                End If
+                _serviceDeleter.DeleteService(serviceHandle)
+                Return True
+            Catch ex As Exception
+                Throw
+            End Try
         End Function
     End Class
 End Namespace

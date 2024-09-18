@@ -15,7 +15,6 @@
         ''' </summary>
         ''' <returns>The full path to the service executable.</returns>
         Friend Function GetServicePath() As String Implements IServicePathProvider.GetServicePath
-            ' Logic to obtain the service path
             Return "C:\Users\Owner\Desktop\ServiceTest\WorkerService\VbWorkerServicePinvokeLauncher.exe"
         End Function
 

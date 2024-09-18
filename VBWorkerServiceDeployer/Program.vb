@@ -20,9 +20,7 @@
 ''' 
 ''' Just a hobby programmer that enjoys P/Invoke and exploring complex interactions with system-level APIs.
 ''' </remarks>
-
 Module Program
-
     ''' <summary>
     ''' Entry point for the console application. This application manages user interactions to configure and set up services. 
     ''' It prompts users for input to determine whether to proceed with various setup tasks and performs actions based on their responses.
@@ -47,13 +45,17 @@ Module Program
     ''' The variable <c>serviceProvider</c> service management tasks. 
     ''' </para>
     ''' <para>
-    ''' The <c>appRunner</c>> variable is responsible for orchestrating the setup process by executing the application's core logic.
+    ''' The <c>appRunner</c> variable is responsible for orchestrating the setup process by executing the application's core logic.
     ''' </para>
     ''' </remarks>
     <SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification:="Standard Main method parameter signature.")>
     Sub Main(args As String())
-        Dim serviceProvider As IServiceProvider = ServiceConfigurator.ConfigureServices()
-        Dim appRunner As New AppRunner(serviceProvider)
-        appRunner.RunAsync().GetAwaiter().GetResult()
+        Try
+            Dim serviceProvider As IServiceProvider = ServiceConfigurator.ConfigureServices()
+            Dim appRunner As New AppRunner(serviceProvider)
+            appRunner.RunAsync().GetAwaiter().GetResult()
+        Catch ex As Exception
+            Console.WriteLine($"An error occurred: {ex.Message}")
+        End Try
     End Sub
 End Module

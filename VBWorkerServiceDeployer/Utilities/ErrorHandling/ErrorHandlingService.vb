@@ -13,6 +13,11 @@
         Implements IErrorHandlingService
 
         ''' <summary>
+        ''' The error message format used when creating an <see cref="InvalidOperationException"/>.
+        ''' </summary>
+        Private Const ErrorMessageFormat As String = "Failed to create service. Error code: {0} - {1}"
+
+        ''' <summary>
         ''' Provides utility methods for retrieving Win32 error codes.
         ''' </summary>
         Private ReadOnly _win32ErrorHelper As IWin32ErrorHelper
@@ -80,7 +85,7 @@
             Dim lastErrorCode As Integer = _win32ErrorHelper.GetLastWin32Error()
             Dim errorCode As Win32ErrorCode = _win32ErrorUtility.ToWin32ErrorCode(lastErrorCode)
             Dim errorDescription As String = _win32ErrorUtility.GetErrorDescription(errorCode)
-            Return New InvalidOperationException($"Failed to create service. Error code: {lastErrorCode} - {errorDescription}")
+            Return New InvalidOperationException(String.Format(ErrorMessageFormat, lastErrorCode, errorDescription))
         End Function
     End Class
 End Namespace

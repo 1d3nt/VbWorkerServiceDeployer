@@ -26,6 +26,28 @@
         ''' By using a dictionary, the implementation can efficiently map error codes to their descriptions, offering 
         ''' faster lookups compared to alternative methods such as switch or select case statements. The dictionary can 
         ''' be easily extended or modified as needed to accommodate additional error codes or update existing descriptions.
+        ''' 
+        ''' The keys in this dictionary are <see cref="Win32ErrorCode"/> enum values, and the values are the corresponding
+        ''' descriptions of these error codes. For more information about error codes, refer to:
+        ''' <see href="https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-">System Error Codes (0-499)</see>.
+        ''' 
+        ''' The following bullet points map the <see cref="Win32ErrorCode"/> enum values to their descriptions:
+        ''' <list type="bullet">
+        '''     <item><description><see cref="Win32ErrorCode.Success"/>: The operation completed successfully.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.FileNotFound"/>: The system cannot find the file specified.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.PathNotFound"/>: The system cannot find the path specified.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.SharingViolation"/>: The process cannot access the file because it is being used by another process.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.NetNameDeleted"/>: The specified network name is no longer available.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.AccessDenied"/>: Access is denied.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.InvalidHandle"/>: The handle is invalid.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.NotEnoughMemory"/>: Not enough storage is available to process this command.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.InvalidParameter"/>: The parameter is incorrect.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.MessageNotFound"/>: The system cannot find the message text for message number 0x%1 in the message file for %2.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.BufferTooSmall"/>: The data area passed to a system call is too small.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.PrivilegeNotHeld"/>: A required privilege is not held by the client.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.ServiceDoesNotExist"/>: The specified service does not exist as an installed service.</description></item>
+        '''     <item><description><see cref="Win32ErrorCode.Unknown"/>: Represents an unknown Win32 error code that does not map to any known error constants.</description></item>
+        ''' </list>
         ''' </remarks>
         ''' <seealso cref="Win32ErrorCode"/>
         Private Shared ReadOnly ErrorDescriptions As New Dictionary(Of Win32ErrorCode, String)() From {
@@ -74,7 +96,7 @@
         ''' <remarks>
         ''' This method is used to map an integer error code to the <see cref="Win32ErrorCode"/> enumeration.
         ''' </remarks>
-        Friend Function ToWin32ErrorCode(errorCode As Integer) As Win32ErrorCode Implements  IWin32ErrorUtility.ToWin32ErrorCode
+        Friend Function ToWin32ErrorCode(errorCode As Integer) As Win32ErrorCode Implements IWin32ErrorUtility.ToWin32ErrorCode
             If [Enum].IsDefined(GetType(Win32ErrorCode), errorCode) Then
                 Return DirectCast([Enum].ToObject(GetType(Win32ErrorCode), errorCode), Win32ErrorCode)
             Else

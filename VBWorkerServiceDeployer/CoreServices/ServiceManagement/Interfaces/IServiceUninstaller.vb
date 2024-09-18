@@ -7,6 +7,7 @@
     ''' The <see cref="IServiceUninstaller"/> interface provides a method for uninstalling a service.
     ''' Implementing classes should provide the actual logic for uninstalling the service.
     ''' </remarks>
+    ''' <seealso cref="ServiceUninstaller"/>
     Public Interface IServiceUninstaller
 
         ''' <summary>
