@@ -24,7 +24,7 @@
     ''' </para>
     ''' 
     ''' For more information about service start types, refer to:
-    ''' <see href="https://learn.microsoft.com/en-us/windows/win32/services/service-start-type">Service Start Type</see>.
+    ''' <see href="https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode?view=net-8.0">ServiceStartMode Enum</see>.
     ''' </remarks>
     Friend Enum StartType As UInteger
 

@@ -22,18 +22,23 @@
     ''' For more information about service types, refer to:
     ''' <see href="https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicetype?view=net-8.0">ServiceType Enum</see>.
     ''' </remarks>
+    <Flags>
     Friend Enum ServiceType As UInteger
 
         ''' <summary>
         ''' The service is a kernel-mode driver.
         ''' Corresponds to <c>SERVICE_KERNEL_DRIVER</c> in C++.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code.
         ''' </summary>
+        <UsedImplicitly>
         KernelDriver = &H1
 
         ''' <summary>
         ''' The service is a file system driver.
         ''' Corresponds to <c>SERVICE_FILE_SYSTEM_DRIVER</c> in C++.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code.
         ''' </summary>
+        <UsedImplicitly>
         FileSystemDriver = &H2
 
         ''' <summary>
@@ -45,13 +50,17 @@
         ''' <summary>
         ''' The service runs in the same process as other services.
         ''' Corresponds to <c>SERVICE_WIN32_SHARE_PROCESS</c> in C++.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code.
         ''' </summary>
+        <UsedImplicitly>
         Win32ShareProcess = &H20
 
         ''' <summary>
         ''' The service can interact with the desktop.
         ''' Corresponds to <c>SERVICE_INTERACTIVE_PROCESS</c> in C++.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code.
         ''' </summary>
+        <UsedImplicitly>
         Interactive = &H100
 
         ''' <summary>
@@ -60,7 +69,9 @@
         ''' 
         ''' Corresponds to the combination of <c>SERVICE_KERNEL_DRIVER</c>, <c>SERVICE_FILE_SYSTEM_DRIVER</c>, 
         ''' <c>SERVICE_WIN32_OWN_PROCESS</c>, <c>SERVICE_WIN32_SHARE_PROCESS</c>, and <c>SERVICE_INTERACTIVE_PROCESS</c> in C++.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code.
         ''' </summary>
+        <UsedImplicitly>
         All = KernelDriver Or FileSystemDriver Or Win32OwnProcess Or Win32ShareProcess Or Interactive
     End Enum
 End Namespace

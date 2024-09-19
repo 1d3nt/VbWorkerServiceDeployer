@@ -54,10 +54,13 @@
         ''' </summary>
         ''' <remarks>
         ''' The error is logged. If the system is loading a last-known good configuration, the system will attempt to start the service.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code, 
+        ''' but is included for completeness and potential future use.
         ''' </remarks>
         ''' <example>
         ''' In C++: <code>ERROR_CONTROL_SEVERE</code>
         ''' </example>
+        <UsedImplicitly>
         ServiceErrorSevere = 2
 
         ''' <summary>
@@ -65,10 +68,13 @@
         ''' </summary>
         ''' <remarks>
         ''' The error is logged, a message is displayed, and the service is marked as failed. The system will stop the startup process.
+        ''' This member is marked with <see cref="UsedImplicitlyAttribute"/> because it is not directly referenced in the current code, 
+        ''' but is included for completeness and potential future use.
         ''' </remarks>
         ''' <example>
         ''' In C++: <code>ERROR_CONTROL_CRITICAL</code>
         ''' </example>
+        <UsedImplicitly>
         ServiceErrorCritical = 3
     End Enum
 End Namespace
