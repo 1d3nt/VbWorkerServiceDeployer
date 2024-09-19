@@ -33,8 +33,8 @@
         ''' An instance of <see cref="IErrorHandlingService"/> used for handling errors.
         ''' </param>
         ''' <remarks>
-        ''' The constructor initializes the <see cref="_servicePathProvider"/> and <see cref="_errorHandlingService"/>
-        ''' fields, which are used to provide service paths and handle any errors that occur during service creation.
+        ''' The constructor initializes the <see cref="_servicePathProvider"/> and <see cref="_errorHandlingService"/> fields,
+        ''' which are used to provide service paths and handle errors respectively.
         ''' </remarks>
         Public Sub New(servicePathProvider As IServicePathProvider, errorHandlingService As IErrorHandlingService)
             _servicePathProvider = servicePathProvider
@@ -59,8 +59,12 @@
             Dim serviceName As String = _servicePathProvider.GetServiceName()
             Dim servicePath As String = _servicePathProvider.GetServicePath()
             Dim service As IntPtr = CreateService(serviceControlManager, serviceName, servicePath)
-            HandleErrors(serviceControlManager)
-            Return service
+            Try
+                _errorHandlingService.HandleWin32Error(serviceControlManager)
+                Return service
+            Catch ex As Exception
+                Throw
+            End Try
         End Function
 
         ''' <summary>
@@ -93,17 +97,5 @@
                 lpPassword:=Nothing
             )
         End Function
-
-        ''' <summary>
-        ''' Handles any errors that occur during the service creation process.
-        ''' </summary>
-        ''' <param name="serviceControlManager">The handle to the Service Control Manager.</param>
-        ''' <remarks>
-        ''' This method uses the <see cref="IErrorHandlingService"/> to handle any Win32 errors that might
-        ''' occur during the service creation process.
-        ''' </remarks>
-        Private Sub HandleErrors(serviceControlManager As IntPtr)
-            _errorHandlingService.HandleWin32Error(serviceControlManager)
-        End Sub
     End Class
 End Namespace

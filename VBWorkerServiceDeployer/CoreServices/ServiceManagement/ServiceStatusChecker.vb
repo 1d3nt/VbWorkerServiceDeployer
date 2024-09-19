@@ -45,7 +45,6 @@
             Dim serviceStatus As New ServiceStatus
             Dim startTime As DateTime = DateTime.Now
             Do
-                Await AsynchronousProcessor.SimulateDelayedResponse(DelayMilliseconds)
                 Try
                     If Not NativeMethods.QueryServiceStatus(serviceHandle, serviceStatus) Then
                         _errorHandlingService.HandleWin32Error(serviceHandle)
@@ -56,10 +55,10 @@
                 If IsServiceStopped(serviceStatus) Then
                     Return True
                 End If
+                Await AsynchronousProcessor.SimulateDelayedResponse(DelayMilliseconds)
             Loop While (DateTime.Now - startTime).TotalMilliseconds < Timeout
             Return IsServiceStopped(serviceStatus)
         End Function
-
 
         ''' <summary>
         ''' Determines whether the specified service status indicates that the service has stopped.
