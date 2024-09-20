@@ -35,9 +35,10 @@ This project is responsible for:
 ### Steps to Install
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/1d3nt/VBWorkerServiceDeployer.git
-   ```
+   git clone https://github.com/1d3nt/VBWorkerServiceDeployer.git   ```
 2. **Navigate to the Project Directory**:
   ```bash
   cd VBWorkerServiceDeployer
   ```
+3. Build the Project: Open the project in Visual Studio and build it to generate the executable.
+4. Run the Application: Execute the built application from the command line or Visual Studio to install the service.
