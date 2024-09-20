@@ -1,7 +1,13 @@
 # VBWorkerServiceDeployer
 
 ## Overview
-**VBWorkerServiceDeployer** is a .NET 8.0 application designed to install the [VbWorkerServicePinvokeLauncher](https://github.com/1d3nt/VbWorkerServicePinvokeLauncher) service, the first project in a trilogy that showcases the power of P/Invoke for Windows API interactions. This project emphasizes the use of P/Invoke in the context of service installation and uninstallation, demonstrating the intricacies of interacting with Windows APIs for service management.
+**VBWorkerServiceDeployer** is a .NET 8.0 application designed to install the [VbWorkerServicePinvokeLauncher](https://github.com/1d3nt/VbWorkerServicePinvokeLauncher) service, the first project in a trilogy that showcases the power of P/Invoke for Windows API interactions. 
+
+This project emphasizes the use of P/Invoke in the context of service installation and uninstallation, demonstrating the intricacies of interacting with Windows APIs for service management. 
+
+A key focus of **VBWorkerServiceDeployer** is on implementing dependency injection, allowing for a flexible and testable architecture. Using dependency injection, we ensure that each component can be easily replaced or mocked during testing, facilitating better maintainability and scalability.
+
+Furthermore, we adhere to the Single Responsibility Principle, ensuring that each class in the project has a distinct and focused responsibility. This design choice enhances code clarity and reduces complexity, making the application easier to understand and maintain.
 
 ## Functionality
 This project is responsible for:
