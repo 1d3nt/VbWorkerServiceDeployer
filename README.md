@@ -8,8 +8,8 @@ This project is responsible for:
 - **Installing the Worker Service**: It creates and configures the Windows service that utilizes token duplication to launch processes under the SYSTEM account.
 - **Configuring File Paths**: Ensures that the service executable is located at:
 
-```bash
-C:\Users\Owner\Desktop\ServiceTest\WorkerService\VbWorkerServicePinvokeLauncher.exe
-```
+  ```bash
+  C:\Users\Owner\Desktop\ServiceTest\WorkerService\VbWorkerServicePinvokeLauncher.exe
+  ```
 
 
