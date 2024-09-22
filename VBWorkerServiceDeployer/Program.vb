@@ -51,12 +51,14 @@ Module Program
     ''' </remarks>
     <SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification:="Standard Main method parameter signature.")>
     Sub Main(args As String())
+        Dim serviceProvider As IServiceProvider = ServiceConfigurator.ConfigureServices()
+        Dim userPrompter = serviceProvider.GetService(Of IUserPrompter)()
+        Dim userInputReader = serviceProvider.GetService(Of IUserInputReader)()
+        Dim appRunner As New AppRunner(serviceProvider, userPrompter, userInputReader)
         Try
-            Dim serviceProvider As IServiceProvider = ServiceConfigurator.ConfigureServices()
-            Dim appRunner As New AppRunner(serviceProvider)
             appRunner.RunAsync().GetAwaiter().GetResult()
         Catch ex As Exception
-            Console.WriteLine($"An error occurred: {ex.Message}")
+            userPrompter.Prompt($"An error occurred: {ex.Message}")
         End Try
     End Sub
 End Module

@@ -16,18 +16,35 @@
         Private ReadOnly _serviceProvider As IServiceProvider
 
         ''' <summary>
+        ''' The user prompter used for displaying messages to the user.
+        ''' </summary>
+        Private ReadOnly _userPrompter As IUserPrompter
+
+        ''' <summary>
+        ''' The user input reader used for reading user input.
+        ''' </summary>
+        Private ReadOnly _userInputReader As IUserInputReader
+
+        ''' <summary>
         ''' Initializes a new instance of the <see cref="AppRunner"/> class.
         ''' </summary>
         ''' <param name="serviceProvider">
         ''' An instance of <see cref="IServiceProvider"/> used to resolve dependencies and obtain services.
         ''' </param>
+        ''' <param name="userPrompter">
+        ''' An instance of <see cref="IUserPrompter"/> used to display messages to the user.
+        ''' </param>
+        ''' <param name="userInputReader">
+        ''' An instance of <see cref="IUserInputReader"/> used to read user input.
+        ''' </param>
         ''' <remarks>
-        ''' The constructor takes an <see cref="IServiceProvider"/> as a parameter and assigns it to the
-        ''' <see cref="_serviceProvider"/> field. This service provider is used throughout the class to obtain 
-        ''' necessary services.
+        ''' The constructor takes an <see cref="IServiceProvider"/>, an <see cref="IUserPrompter"/>, and an <see cref="IUserInputReader"/> 
+        ''' as parameters and assigns them to the corresponding fields.
         ''' </remarks>
-        Friend Sub New(serviceProvider As IServiceProvider)
+        Friend Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader)
             _serviceProvider = serviceProvider
+            _userPrompter = userPrompter
+            _userInputReader = userInputReader
         End Sub
 
         ''' <summary>
@@ -35,8 +52,7 @@
         ''' </summary>
         ''' <remarks>
         ''' The <see cref="RunAsync"/> method retrieves the <see cref="IUserInputChecker"/> from the service provider,
-        ''' uses it to get the friendly user account type, and prints it to the console. The method then waits 
-        ''' for the user to press Enter before terminating.
+        ''' uses it to determine if the user wants to proceed with installing the service, and displays the result to the user.
         ''' </remarks>
         Friend Async Function RunAsync() As Task
             Dim userInputChecker = _serviceProvider.GetService(Of IUserInputChecker)()
@@ -48,7 +64,7 @@
                 UninstallService()
             End If
 
-            Console.ReadLine()
+            _userInputReader.ReadInput()
         End Function
 
         ''' <summary>
@@ -61,9 +77,9 @@
             Dim serviceInstaller = _serviceProvider.GetService(Of IServiceInstaller)()
             Try
                 Dim installationSuccess = serviceInstaller.InstallService()
-                Console.WriteLine($"Service installation success: {installationSuccess}")
+                _userPrompter.Prompt($"Service installation success: {installationSuccess}")
             Catch ex As Exception
-                Console.WriteLine($"Service installation failed: {ex.Message}")
+                _userPrompter.Prompt($"Service installation failed: {ex.Message}")
             End Try
         End Sub
 
@@ -92,8 +108,7 @@
         ''' the delay before uninstalling the service.
         ''' </remarks>
         Private Sub PromptUserAboutDelay(delayMilliseconds As Integer)
-            Dim userPrompter = _serviceProvider.GetService(Of IUserPrompter)()
-            userPrompter.Prompt($"The service will wait for {delayMilliseconds / 1000} seconds before proceeding to uninstall.")
+            _userPrompter.Prompt($"The service will wait for {delayMilliseconds / 1000} seconds before proceeding to uninstall.")
         End Sub
 
         ''' <summary>
@@ -106,9 +121,9 @@
             Dim serviceUninstaller = _serviceProvider.GetService(Of IServiceUninstaller)()
             Try
                 Dim uninstallationSuccess = Await serviceUninstaller.UninstallServiceAsync()
-                Console.WriteLine($"Service uninstallation success: {uninstallationSuccess}")
+                _userPrompter.Prompt($"Service uninstallation success: {uninstallationSuccess}")
             Catch ex As Exception
-                Console.WriteLine($"Service uninstallation failed: {ex.Message}")
+                _userPrompter.Prompt($"Service uninstallation failed: {ex.Message}")
             End Try
         End Sub
     End Class
