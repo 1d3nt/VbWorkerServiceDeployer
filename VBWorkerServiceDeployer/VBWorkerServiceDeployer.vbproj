@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>VBWorkerServiceDeployer</RootNamespace>
+    <RootNamespace>VbWorkerServiceDeployer</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
-    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,System.Diagnostics.CodeAnalysis=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VBWorkerServiceDeployer.Application=False,VBWorkerServiceDeployer.CoreServices.ServiceManagement=False,VBWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods=False,VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Structs=False,VBWorkerServiceDeployer.Utilities=False,VBWorkerServiceDeployer.Utilities.ErrorHandling=False,VBWorkerServiceDeployer.Utilities.ErrorHandling.Interfaces=False,VBWorkerServiceDeployer.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VBWorkerServiceDeployer=True</ImportedNamespaces>
+    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,System.Diagnostics.CodeAnalysis=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VbWorkerServiceDeployer.Application=False,VbWorkerServiceDeployer.CoreServices.ServiceManagement=False,VbWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces=False,VbWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums=False,VbWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods=False,VbWorkerServiceDeployer.CoreServices.WindowsApiInterop.Structs=False,VbWorkerServiceDeployer.Utilities=False,VbWorkerServiceDeployer.Utilities.ErrorHandling=False,VbWorkerServiceDeployer.Utilities.ErrorHandling.Interfaces=False,VbWorkerServiceDeployer.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VbWorkerServiceDeployer=True</ImportedNamespaces>
     <OptionStrict>On</OptionStrict>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -16,16 +16,16 @@
     <Import Include="System.Diagnostics.CodeAnalysis" />
     <Import Include="System.Runtime.InteropServices" />
     <Import Include="System.Runtime.Versioning" />
-    <Import Include="VBWorkerServiceDeployer.Application" />
-    <Import Include="VBWorkerServiceDeployer.CoreServices.ServiceManagement" />
-    <Import Include="VBWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces" />
-    <Import Include="VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums" />
-    <Import Include="VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods" />
-    <Import Include="VBWorkerServiceDeployer.CoreServices.WindowsApiInterop.Structs" />
-    <Import Include="VBWorkerServiceDeployer.Utilities" />
-    <Import Include="VBWorkerServiceDeployer.Utilities.ErrorHandling" />
-    <Import Include="VBWorkerServiceDeployer.Utilities.ErrorHandling.Interfaces" />
-    <Import Include="VBWorkerServiceDeployer.Utilities.Interfaces" />
+    <Import Include="VbWorkerServiceDeployer.Application" />
+    <Import Include="VbWorkerServiceDeployer.CoreServices.ServiceManagement" />
+    <Import Include="VbWorkerServiceDeployer.CoreServices.ServiceManagement.Interfaces" />
+    <Import Include="VbWorkerServiceDeployer.CoreServices.WindowsApiInterop.Enums" />
+    <Import Include="VbWorkerServiceDeployer.CoreServices.WindowsApiInterop.Methods" />
+    <Import Include="VbWorkerServiceDeployer.CoreServices.WindowsApiInterop.Structs" />
+    <Import Include="VbWorkerServiceDeployer.Utilities" />
+    <Import Include="VbWorkerServiceDeployer.Utilities.ErrorHandling" />
+    <Import Include="VbWorkerServiceDeployer.Utilities.ErrorHandling.Interfaces" />
+    <Import Include="VbWorkerServiceDeployer.Utilities.Interfaces" />
   </ItemGroup>
 
   <ItemGroup>
