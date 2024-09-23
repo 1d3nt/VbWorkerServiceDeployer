@@ -19,6 +19,7 @@
 ''' Contributions and enhancements are welcomed to further extend the functionality and improve the integration.
 ''' 
 ''' Just a hobby programmer that enjoys P/Invoke and exploring complex interactions with system-level APIs.
+''' My mallory x
 ''' </remarks>
 Module Program
 
