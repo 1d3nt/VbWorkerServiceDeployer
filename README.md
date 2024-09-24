@@ -35,25 +35,6 @@ This project is responsible for:
 }
 ```
 
-## Installation
-### Prerequisites
-- .NET 8.0 SDK
-- A compatible development environment (e.g., Visual Studio 2022 or later).
-
-### Steps to Install
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/1d3nt/VbWorkerServiceDeployer.git
-   ```
-2. **Navigate to the Project Directory**:
-    ```bash
-    cd VbWorkerServiceDeployer
-    ```
-3. Build the Project: Open the project in Visual Studio and build it to generate the executable.
-4. Run the Application: Execute the built application from the command line or Visual Studio to install the service.
-
-![My Image](https://i.imgur.com/j9GatYU.png)
-
 ## Project Structure
 
 ```bash
@@ -120,3 +101,22 @@ This project is responsible for:
 |-- GlobalAttributes.vb
 +-- Program.vb
 ```
+
+## Installation
+### Prerequisites
+- .NET 8.0 SDK
+- A compatible development environment (e.g., Visual Studio 2022 or later).
+
+### Steps to Install
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/1d3nt/VbWorkerServiceDeployer.git
+   ```
+2. **Navigate to the Project Directory**:
+    ```bash
+    cd VbWorkerServiceDeployer
+    ```
+3. Build the Project: Open the project in Visual Studio and build it to generate the executable.
+4. Run the Application: Execute the built application from the command line or Visual Studio to install the service.
+
+![My Image](https://i.imgur.com/j9GatYU.png)
