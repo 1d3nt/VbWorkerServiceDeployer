@@ -11,11 +11,12 @@
         Implements IServicePathProvider
 
         ''' <summary>
-        ''' Gets the full path to the service executable.
+        ''' Gets the full path to the service executable using the current user's Desktop directory.
         ''' </summary>
-        ''' <returns>The full path to the service executable.</returns>
+        ''' <returns>The full path to the service executable located on the user's Desktop.</returns>
         Friend Function GetServicePath() As String Implements IServicePathProvider.GetServicePath
-            Return "C:\Users\Owner\Desktop\ServiceTest\WorkerService\VbWorkerServicePinvokeLauncher.exe"
+            Dim desktopPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            Return io.Path.Combine(desktopPath, "ServiceTest", "WorkerService", "VbWorkerServicePinvokeLauncher.exe")
         End Function
 
         ''' <summary>
